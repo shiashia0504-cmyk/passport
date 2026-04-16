@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>소요도서관 · 디지털 산책</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #f5f9f5;
+  --bg2:      #ffffff;
+  --bg3:      #f0f7f4;
+  --pink:     #e8789a;
+  --pink-lt:  #fce4ed;
+  --pink-dk:  #c75a7c;
+  --mint:     #52b99e;
+  --mint-lt:  #ddf4ee;
+  --mint-dk:  #3a9e8a;
+  --sage:     #7bab8b;
+  --peach:    #f4a261;
+  --peach-lt: #fde8d5;
+  --sky:      #6ab4d8;
+  --text:     #2d3a2e;
+  --muted:    #8a9e8e;
+  --border:   #d4e8dc;
+  --path:     #b8d4c0;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ── 헤더 ── */
+header {
+  background: linear-gradient(170deg, #fce8f2 0%, #e8f5f0 60%, #edf5e0 100%);
+  text-align: center;
+  padding: 2.2rem 1.5rem 1.8rem;
+  border-bottom: 2px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.header-map-bg {
+  position: absolute; inset: 0;
+  opacity: 0.06;
+  background-image:
+    radial-gradient(circle at 20% 30%, var(--mint) 1px, transparent 1px),
+    radial-gradient(circle at 80% 20%, var(--pink) 1px, transparent 1px),
+    radial-gradient(circle at 50% 70%, var(--sage) 1px, transparent 1px),
+    radial-gradient(circle at 30% 80%, var(--peach) 1px, transparent 1px),
+    radial-gradient(circle at 70% 60%, var(--mint) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--mint-dk);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+header h1 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(1.6rem, 5.5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+header h1 em { color: var(--pink); font-style: normal; }
+.header-sub { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; }
+.header-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--mint-lt);
+  border: 1.5px solid #b0e0d4;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  color: var(--mint-dk);
+  font-weight: 600;
+  margin-top: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── 산책로 레이아웃 ── */
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 1rem 5rem;
+  position: relative;
+}
+
+/* 세로 점선 산책로 */
+.trail-line {
+  position: absolute;
+  left: calc(1rem + 22px);
+  top: 0; bottom: 0;
+  width: 3px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--path) 0px,
+    var(--path) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  z-index: 0;
+}
+
+/* ── 경유지 (스테이션) ── */
+.station {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 0 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* 왼쪽 마커 */
+.station-marker {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 44px;
+}
+.marker-pin {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+.pin-pink   { background: linear-gradient(135deg, #f9a8c9, var(--pink)); }
+.pin-mint   { background: linear-gradient(135deg, #90d4c4, var(--mint)); }
+.pin-sage   { background: linear-gradient(135deg, #a8c8b0, var(--sage)); }
+.pin-peach  { background: linear-gradient(135deg, #f8c090, var(--peach)); }
+.pin-sky    { background: linear-gradient(135deg, #a0cce8, var(--sky)); }
+
+.station-num {
+  font-size: 0.6rem;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-top: 5px;
+}
+
+/* 오른쪽 카드 */
+.station-content { flex: 1; min-width: 0; }
+.station-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+
+/* 카드 */
+.card {
+  background: var(--bg2);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(82,185,158,0.08);
+}
+.card-body { padding: 1.1rem; }
+
+/* 로딩 */
+.loading { color: var(--muted); animation: pulse 1.4s ease-in-out infinite; font-size:.82rem; }
+@keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:.9} }
+
+/* ── 특보 카드 ── */
+.issue-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--pink-lt);
+  border: 1.5px solid #f5c2d4;
+  border-radius: 20px;
+  padding: 3px 11px;
+  font-size: 0.72rem;
+  color: var(--pink-dk);
+  font-weight: 700;
+  margin-bottom: 0.65rem;
+}
+.issue-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(1rem, 3.2vw, 1.15rem);
+  line-height: 1.75;
+  margin-bottom: 0.5rem;
+}
+.issue-sentence {
+  font-size: 0.83rem;
+  color: #7a5a6a;
+  line-height: 1.7;
+  margin-bottom: 0.9rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--pink-lt);
+  border-left: 3px solid var(--pink);
+  border-radius: 0 10px 10px 0;
+}
+.issue-viewer {
+  background: var(--bg3);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.issue-viewer img { width:100%; display:block; max-height:460px; object-fit:contain; background:#fff; }
+.issue-viewer iframe { width:100%; height:460px; border:none; display:block; }
+.viewer-placeholder {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:2.5rem 1rem; gap:0.5rem; color:var(--muted); font-size:.82rem; text-align:center;
+}
+.open-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 0.7rem;
+  background: var(--mint-lt);
+  border: 1.5px solid #b0e0d4;
+  border-radius: 20px;
+  color: var(--mint-dk);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.78rem; font-weight: 600;
+  padding: 0.4rem 1rem;
+  text-decoration: none;
+  transition: background .15s;
+}
+.open-btn:hover { background: #c4ede4; }
+
+/* ── 게임 링크 ── */
+.game-list { display:flex; flex-direction:column; gap:0.6rem; }
+.game-link {
+  display:flex; align-items:center; gap:0.8rem;
+  background: var(--bg3);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  text-decoration:none; color:var(--text);
+  transition: border-color .18s, background .18s;
+}
+.game-link:hover { border-color: var(--mint); background: var(--mint-lt); }
+.game-arrow { margin-left:auto; color:var(--muted); }
+.badge { font-size:0.6rem; font-weight:700; letter-spacing:0.07em; padding:3px 8px; border-radius:20px; flex-shrink:0; }
+.badge-mint { background:var(--mint-lt); color:var(--mint-dk); }
+.badge-pink { background:var(--pink-lt); color:var(--pink-dk); }
+.game-name { font-size:0.85rem; font-weight:600; }
+.game-desc { font-size:0.72rem; color:var(--muted); margin-top:1px; }
+
+/* ── 건강여권 ── */
+.passport-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.6rem; }
+.grade-block {
+  background: var(--bg3);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+}
+.grade-name { font-size:0.7rem; color:var(--mint-dk); font-weight:700; letter-spacing:0.06em; margin-bottom:0.45rem; }
+.stamp-row { display:flex; flex-wrap:wrap; gap:4px; }
+.stamp {
+  width:22px; height:22px; border-radius:50%;
+  border: 1.5px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; background:#fff;
+}
+.stamp.done { border-color:var(--mint); background:var(--mint-lt); }
+.stamp.empty { opacity:0.3; }
+.passport-note { font-size:0.72rem; color:var(--muted); margin-top:0.85rem; text-align:center; }
+
+/* ── 댓글 탭 ── */
+.tab-bar {
+  display:flex; gap:0;
+  border-bottom: 1.5px solid var(--border);
+  overflow-x:auto; scrollbar-width:none;
+  background: #f8fcfa;
+}
+.tab-bar::-webkit-scrollbar { display:none; }
+.tab-btn {
+  flex-shrink:0; background:none; border:none;
+  border-bottom: 2.5px solid transparent;
+  color:var(--muted);
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:0.78rem; font-weight:500;
+  padding:0.65rem 1rem 0.55rem;
+  cursor:pointer;
+  transition:color .15s, border-color .15s;
+  white-space:nowrap; margin-bottom:-1.5px;
+}
+.tab-btn.active { color:var(--pink-dk); border-bottom-color:var(--pink); }
+.tab-btn.current-issue::after { content:'🌸'; font-size:9px; margin-left:3px; vertical-align:middle; }
+
+.comment-section { padding:1rem 1.1rem; }
+.comment-form { display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem; }
+.form-row { display:flex; gap:0.45rem; }
+.form-row select, .form-row input, .comment-form textarea {
+  background: var(--bg3);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:0.84rem;
+  padding:0.52rem 0.7rem;
+  outline:none;
+  transition:border-color .15s;
+  -webkit-appearance:none;
+}
+.form-row select:focus, .form-row input:focus, .comment-form textarea:focus { border-color:var(--pink); }
+.form-row select { flex:0 0 82px; cursor:pointer; }
+.form-row input  { flex:1; }
+.comment-form textarea { resize:none; height:65px; width:100%; line-height:1.55; }
+.submit-btn {
+  align-self:flex-end;
+  background: var(--pink);
+  border:none; border-radius:20px;
+  color:#fff;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:0.82rem; font-weight:700;
+  padding:0.5rem 1.2rem;
+  cursor:pointer;
+  transition:background .15s, transform .1s;
+  box-shadow:0 2px 8px rgba(232,120,154,0.3);
+}
+.submit-btn:hover { background:var(--pink-dk); }
+.submit-btn:active { transform:scale(0.97); }
+.submit-btn:disabled { opacity:.5; cursor:default; }
+
+.comment-divider { border:none; border-top:1.5px solid var(--border); margin-bottom:0.85rem; }
+.comment-list { display:flex; flex-direction:column; gap:0.75rem; }
+.comment-item { display:flex; gap:0.6rem; align-items:flex-start; }
+.comment-avatar {
+  width:30px; height:30px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.62rem; font-weight:700;
+}
+.av-1{background:#fce4ed;color:var(--pink-dk)}
+.av-2{background:var(--mint-lt);color:var(--mint-dk)}
+.av-3{background:#ede8f7;color:#8b6cc4}
+.av-4{background:var(--peach-lt);color:#d4762a}
+.av-5{background:#fef4d5;color:#c49a10}
+.av-6{background:#e4f0fd;color:#3a7dc9}
+.comment-bubble { flex:1; min-width:0; }
+.comment-meta { font-size:0.68rem; color:var(--muted); margin-bottom:3px; }
+.comment-meta strong { color:var(--text); font-weight:600; }
+.comment-text {
+  font-size:0.84rem; line-height:1.55;
+  background:var(--bg3);
+  border:1.5px solid var(--border);
+  border-radius:3px 12px 12px 12px;
+  padding:0.5rem 0.75rem;
+  word-break:keep-all;
+  display:inline-block; max-width:100%;
+}
+.no-comments { text-align:center; color:var(--muted); font-size:0.82rem; padding:1.4rem 0; }
+
+/* ── 도착 배너 ── */
+.arrival-station {
+  display:flex; gap:1rem;
+  padding:1.5rem 0 2rem;
+  position:relative; z-index:1;
+}
+.arrival-card {
+  flex:1;
+  background: linear-gradient(135deg, var(--pink-lt), var(--mint-lt));
+  border: 1.5px solid #d4e8dc;
+  border-radius: 16px;
+  padding: 1.1rem;
+  text-align: center;
+}
+.arrival-card p { font-size:0.82rem; color:var(--muted); margin-top:0.3rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-map-bg"></div>
+  <div class="eyebrow">소요초등학교 도서관</div>
+  <h1>소요<em>도서관</em></h1>
+  <p class="header-sub">오늘도 산책하러 오셨나요?</p>
+  <div class="header-tag">🥾 디지털 산책 코스</div>
+</header>
+
+<main>
+  <div class="trail-line"></div>
+
+  <!-- STOP 1 · 특보 -->
+  <div class="station">
+    <div class="station-marker">
+      <div class="marker-pin pin-pink">📰</div>
+      <div class="station-num">STOP 1</div>
+    </div>
+    <div class="station-content">
+      <div class="station-label">첫 번째 쉼터 · 이번 특보</div>
+      <div class="card" id="issue-card">
+        <div class="card-body">
+          <div class="loading">특보를 불러오는 중…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STOP 2 · 퀴즈/게임 -->
+  <div class="station">
+    <div class="station-marker">
+      <div class="marker-pin pin-mint">🎮</div>
+      <div class="station-num">STOP 2</div>
+    </div>
+    <div class="station-content">
+      <div class="station-label">두 번째 쉼터 · 퀴즈 &amp; 게임</div>
+      <div class="card">
+        <div class="card-body">
+          <div class="game-list">
+            <a class="game-link" href="YOUR_QUIZ_URL" target="_blank">
+              <div>
+                <span class="badge badge-mint">3–4학년</span>
+                <div class="game-name" style="margin-top:3px;">소요도서관 특보 퀴즈</div>
+                <div class="game-desc">이번 특보 문제를 풀어보세요</div>
+              </div>
+              <span class="game-arrow">→</span>
+            </a>
+            <a class="game-link" href="YOUR_SPELLING_URL" target="_blank">
+              <div>
+                <span class="badge badge-pink">1–2학년</span>
+                <div class="game-name" style="margin-top:3px;">특종 기자단 맞춤법 게임</div>
+                <div class="game-desc">띄어쓰기·맞춤법 도전!</div>
+              </div>
+              <span class="game-arrow">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STOP 3 · 건강여권 -->
+  <div class="station">
+    <div class="station-marker">
+      <div class="marker-pin pin-sage">🌿</div>
+      <div class="station-num">STOP 3</div>
+    </div>
+    <div class="station-content">
+      <div class="station-label">세 번째 쉼터 · 건강여권 현황</div>
+      <div class="card">
+        <div class="card-body">
+          <div class="passport-grid" id="passport-grid">
+            <div class="loading" style="grid-column:1/-1;text-align:center;padding:1.2rem 0;">불러오는 중…</div>
+          </div>
+          <p class="passport-note" id="passport-note"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STOP 4 · 댓글 -->
+  <div class="station">
+    <div class="station-marker">
+      <div class="marker-pin pin-peach">💬</div>
+      <div class="station-num">STOP 4</div>
+    </div>
+    <div class="station-content">
+      <div class="station-label">네 번째 쉼터 · 한마디 남기기</div>
+      <div class="card">
+        <div class="tab-bar" id="tab-bar">
+          <div class="loading" style="padding:.7rem 1rem;">불러오는 중…</div>
+        </div>
+        <div id="tab-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 도착 -->
+  <div class="arrival-station">
+    <div class="station-marker">
+      <div class="marker-pin pin-sky">🏁</div>
+      <div class="station-num">도착!</div>
+    </div>
+    <div class="arrival-card">
+      <div style="font-size:1.4rem;margin-bottom:.3rem;">🎉</div>
+      <div style="font-size:.9rem;font-weight:700;color:var(--text);">산책 완료!</div>
+      <p>오늘도 소요도서관을 찾아줘서 고마워요 🌸</p>
+    </div>
+  </div>
+
+</main>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, onValue, push, query, orderByChild, limitToLast }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+// ★ 실제 Firebase 설정으로 교체하세요
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+let currentIssue = null;
+let allIssues    = [];
+
+/* ── 특보 ── */
+onValue(ref(db,'currentIssue'), snap => {
+  currentIssue = snap.val();
+  if (currentIssue) refreshTabs();
+});
+onValue(ref(db,'issues'), snap => {
+  const data = snap.val()||{};
+  allIssues = Object.keys(data).map(k=>({no:parseInt(k),...data[k]})).sort((a,b)=>b.no-a.no);
+  renderIssueCard();
+  refreshTabs();
+});
+
+function renderIssueCard() {
+  const body = document.querySelector('#issue-card .card-body');
+  const cur  = allIssues.find(i=>i.no===currentIssue);
+  if (!cur) { body.innerHTML='<p class="loading">특보 정보를 불러올 수 없어요.</p>'; return; }
+
+  let viewer = '';
+  if (cur.fileUrl && cur.fileType==='image') {
+    viewer = `<div class="issue-viewer"><img src="${cur.fileUrl}" alt="특보 이미지" loading="lazy"></div>`;
+  } else if (cur.fileUrl && cur.fileType==='pdf') {
+    viewer = `<div class="issue-viewer"><iframe src="${cur.fileUrl}" title="특보 PDF"></iframe></div>`;
+  } else {
+    viewer = `<div class="issue-viewer"><div class="viewer-placeholder">📰<br>특보 파일이 곧 올라올 거예요!</div></div>`;
+  }
+  const openBtn = cur.fileUrl
+    ? `<div style="text-align:right;margin-top:.6rem;"><a class="open-btn" href="${cur.fileUrl}" target="_blank">↗ 크게 보기</a></div>`
+    : '';
+
+  body.innerHTML = `
+    <div class="issue-badge">🌸 제${cur.no}호</div>
+    <div class="issue-title">${esc(cur.title||'')}</div>
+    ${cur.sentence?`<div class="issue-sentence">${esc(cur.sentence)}${cur.sentenceSource?`<br><span style="font-size:.75rem;color:var(--pink-dk);">— ${esc(cur.sentenceSource)}</span>`:''}</div>`:''}
+    ${viewer}${openBtn}`;
+}
+
+/* ── 건강여권 ── */
+// ★ 실제 학생 수로 수정하세요
+const GRADE_TOTAL={'1학년':8,'2학년':9,'3학년':10,'4학년':9,'5학년':10,'6학년':9};
+const GRADES=['1학년','2학년','3학년','4학년','5학년','6학년'];
+
+onValue(ref(db,'passport'), snap => {
+  const data=snap.val()||{};
+  const grid=document.getElementById('passport-grid');
+  grid.innerHTML='';
+  let done=0,total=0;
+  GRADES.forEach(grade=>{
+    const d=data[grade]?Object.keys(data[grade]).length:0;
+    const t=GRADE_TOTAL[grade]||10;
+    done+=d; total+=t;
+    const stamps=Array.from({length:t},(_,i)=>
+      `<div class="stamp ${i<d?'done':'empty'}">${i<d?'🌿':''}</div>`
+    ).join('');
+    const b=document.createElement('div');
+    b.className='grade-block';
+    b.innerHTML=`
+      <div class="grade-name">${grade} <span style="color:var(--muted);font-weight:400">${d}/${t}</span></div>
+      <div class="stamp-row">${stamps}</div>`;
+    grid.appendChild(b);
+  });
+  document.getElementById('passport-note').textContent=`전체 ${total}명 중 ${done}명 참여 완료 🎉`;
+});
+
+/* ── 댓글 탭 ── */
+const AV={'1학년':'av-1','2학년':'av-2','3학년':'av-3','4학년':'av-4','5학년':'av-5','6학년':'av-6','선생님':'av-3'};
+let activeTab=null;
+const listeners={};
+
+function refreshTabs() {
+  if (!allIssues.length||currentIssue===null) return;
+  const tabBar=document.getElementById('tab-bar');
+  tabBar.innerHTML='';
+  [...allIssues].sort((a,b)=>b.no-a.no).forEach(issue=>{
+    const btn=document.createElement('button');
+    btn.className='tab-btn'+(issue.no===currentIssue?' current-issue':'');
+    btn.textContent=`제${issue.no}호`;
+    btn.dataset.issue=issue.no;
+    btn.onclick=()=>switchTab(issue.no);
+    tabBar.appendChild(btn);
+  });
+  switchTab(currentIssue);
+}
+
+function switchTab(issueNo) {
+  activeTab=issueNo;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.issue)===issueNo));
+  if (listeners[issueNo]){listeners[issueNo]();delete listeners[issueNo];}
+  document.getElementById('tab-content').innerHTML=`
+    <div class="comment-section">
+      <div class="comment-form">
+        <div class="form-row">
+          <select id="grade-${issueNo}">
+            <option value="">학년</option>
+            <option>1학년</option><option>2학년</option>
+            <option>3학년</option><option>4학년</option>
+            <option>5학년</option><option>6학년</option>
+            <option>선생님</option>
+          </select>
+          <input id="name-${issueNo}" type="text" placeholder="이름" maxlength="6">
+        </div>
+        <textarea id="text-${issueNo}" placeholder="이번 산책길에서 어떤 생각이 들었나요? 🌿" maxlength="100"></textarea>
+        <button class="submit-btn" id="btn-${issueNo}" onclick="window.submitComment(${issueNo})">남기기 ✉</button>
+      </div>
+      <hr class="comment-divider">
+      <div class="comment-list" id="list-${issueNo}">
+        <div class="no-comments loading">댓글을 불러오는 중…</div>
+      </div>
+    </div>`;
+
+  const q=query(ref(db,`comments/issue_${issueNo}`),orderByChild('ts'),limitToLast(30));
+  listeners[issueNo]=onValue(q,snap=>{
+    if(activeTab!==issueNo) return;
+    const el=document.getElementById(`list-${issueNo}`);
+    if(!el) return;
+    const data=snap.val();
+    if(!data){el.innerHTML='<div class="no-comments">아직 댓글이 없어요. 첫 번째로 남겨보세요! 🌸</div>';return;}
+    el.innerHTML=Object.values(data).reverse().map(c=>`
+      <div class="comment-item">
+        <div class="comment-avatar ${AV[c.grade]||'av-1'}">${esc(c.grade?.slice(0,2)||'?')}</div>
+        <div class="comment-bubble">
+          <div class="comment-meta"><strong>${esc(c.name||'익명')}</strong> · ${esc(c.grade||'')} · ${timeAgo(c.ts)}</div>
+          <div class="comment-text">${esc(c.text)}</div>
+        </div>
+      </div>`).join('');
+  });
+}
+
+window.submitComment=async function(no){
+  const grade=document.getElementById(`grade-${no}`).value;
+  const name=document.getElementById(`name-${no}`).value.trim();
+  const text=document.getElementById(`text-${no}`).value.trim();
+  const btn=document.getElementById(`btn-${no}`);
+  if(!grade){alert('학년을 선택해주세요!');return;}
+  if(!name){alert('이름을 입력해주세요!');return;}
+  if(!text){alert('한마디를 입력해주세요!');return;}
+  btn.disabled=true;btn.textContent='등록 중…';
+  await push(ref(db,`comments/issue_${no}`),{grade,name,text,ts:Date.now()});
+  document.getElementById(`text-${no}`).value='';
+  btn.disabled=false;btn.textContent='남기기 ✉';
+};
+
+function timeAgo(ts){
+  if(!ts)return'';
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60)return'방금 전';
+  if(s<3600)return`${Math.floor(s/60)}분 전`;
+  if(s<86400)return`${Math.floor(s/3600)}시간 전`;
+  return`${Math.floor(s/86400)}일 전`;
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+</body>
+</html>
