@@ -7,208 +7,134 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:      #f5f9f5;
-  --bg2:     #ffffff;
-  --bg3:     #f0f7f4;
-  --mint:    #52b99e;
-  --mint-lt: #ddf4ee;
-  --mint-dk: #3a9e8a;
-  --pink:    #e8789a;
-  --pink-lt: #fce4ed;
-  --pink-dk: #c75a7c;
-  --red:     #e85555;
-  --red-lt:  #fde8e8;
-  --text:    #2d3a2e;
-  --muted:   #8a9e8e;
-  --border:  #d4e8dc;
+  --bg:#f5f9f5;--bg2:#fff;--bg3:#f0f7f4;
+  --mint:#52b99e;--mint-lt:#ddf4ee;--mint-dk:#3a9e8a;
+  --pink:#e8789a;--pink-lt:#fce4ed;--pink-dk:#c75a7c;
+  --red:#e85555;--red-lt:#fde8e8;
+  --gold:#e8a932;--gold-lt:#fef4d5;
+  --text:#2d3a2e;--muted:#8a9e8e;--border:#d4e8dc;
 }
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:15px; min-height:100vh; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:15px;min-height:100vh;}
 
 /* 로그인 */
-#login-screen {
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  min-height:100vh; padding:2rem;
-}
-.login-card {
-  background:var(--bg2); border:1.5px solid var(--border); border-radius:18px;
-  padding:2rem 1.8rem; width:100%; max-width:320px;
-  box-shadow:0 4px 20px rgba(82,185,158,.1); text-align:center;
-}
-.login-icon { font-size:2rem; margin-bottom:.8rem; }
-.login-title { font-size:1.05rem; font-weight:700; margin-bottom:.3rem; }
-.login-sub { font-size:.76rem; color:var(--muted); margin-bottom:1.5rem; }
-.login-card input {
-  width:100%; background:var(--bg3); border:1.5px solid var(--border);
-  border-radius:10px; color:var(--text); font-family:'Noto Sans KR',sans-serif;
-  font-size:1rem; padding:.65rem .9rem; outline:none; margin-bottom:.75rem;
-  text-align:center; letter-spacing:.3em; transition:border-color .15s;
-}
-.login-card input:focus { border-color:var(--mint); }
-.login-btn {
-  width:100%; background:var(--mint); border:none; border-radius:20px; color:#fff;
-  font-family:'Noto Sans KR',sans-serif; font-size:.9rem; font-weight:700;
-  padding:.65rem; cursor:pointer; transition:background .15s;
-  box-shadow:0 2px 8px rgba(82,185,158,.3);
-}
-.login-btn:hover { background:var(--mint-dk); }
-.login-error { font-size:.76rem; color:var(--red); margin-top:.6rem; min-height:1.1em; }
-.back-link { margin-top:1.2rem; font-size:.74rem; color:var(--muted); cursor:pointer; display:inline-block; }
-.back-link:hover { color:var(--mint-dk); }
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+.login-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:18px;padding:2rem 1.8rem;width:100%;max-width:320px;box-shadow:0 4px 20px rgba(82,185,158,.1);text-align:center;}
+.login-icon{font-size:2rem;margin-bottom:.8rem;}
+.login-title{font-size:1.05rem;font-weight:700;margin-bottom:.3rem;}
+.login-sub{font-size:.76rem;color:var(--muted);margin-bottom:1.5rem;}
+.login-card input{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:1rem;padding:.65rem .9rem;outline:none;margin-bottom:.75rem;text-align:center;letter-spacing:.3em;transition:border-color .15s;}
+.login-card input:focus{border-color:var(--mint);}
+.login-btn{width:100%;background:var(--mint);border:none;border-radius:20px;color:#fff;font-family:'Noto Sans KR',sans-serif;font-size:.9rem;font-weight:700;padding:.65rem;cursor:pointer;box-shadow:0 2px 8px rgba(82,185,158,.3);}
+.login-btn:hover{background:var(--mint-dk);}
+.login-error{font-size:.76rem;color:var(--red);margin-top:.6rem;min-height:1.1em;}
+.back-link{margin-top:1.2rem;font-size:.74rem;color:var(--muted);display:inline-block;}
+.back-link:hover{color:var(--mint-dk);}
 
-/* 관리자 화면 */
-#admin-screen { display:none; max-width:680px; margin:0 auto; padding:1.2rem 1rem 5rem; }
-
-.admin-header {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:1.2rem; padding-bottom:1rem; border-bottom:1.5px solid var(--border);
-}
-.admin-title { font-size:1rem; font-weight:700; }
-.admin-title em { color:var(--mint-dk); font-style:normal; }
-.logout-btn {
-  background:none; border:1.5px solid var(--border); border-radius:20px;
-  color:var(--muted); font-family:'Noto Sans KR',sans-serif; font-size:.74rem;
-  padding:.32rem .8rem; cursor:pointer; transition:all .15s;
-}
-.logout-btn:hover { border-color:var(--pink); color:var(--pink-dk); }
+/* 관리자 */
+#admin-screen{display:none;max-width:720px;margin:0 auto;padding:1.2rem 1rem 5rem;}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;padding-bottom:1rem;border-bottom:1.5px solid var(--border);}
+.admin-title{font-size:1rem;font-weight:700;}
+.admin-title em{color:var(--mint-dk);font-style:normal;}
+.logout-btn{background:none;border:1.5px solid var(--border);border-radius:20px;color:var(--muted);font-family:'Noto Sans KR',sans-serif;font-size:.74rem;padding:.32rem .8rem;cursor:pointer;}
+.logout-btn:hover{border-color:var(--pink);color:var(--pink-dk);}
 
 /* 탭 */
-.view-tabs {
-  display:flex; gap:0; border-bottom:1.5px solid var(--border);
-  margin-bottom:1.2rem; background:var(--bg2); border-radius:12px 12px 0 0;
-  overflow:hidden;
-}
-.view-tab {
-  flex:1; background:none; border:none; border-bottom:2.5px solid transparent;
-  color:var(--muted); font-family:'Noto Sans KR',sans-serif; font-size:.8rem; font-weight:500;
-  padding:.7rem .5rem; cursor:pointer; transition:all .15s; text-align:center;
-}
-.view-tab.active { color:var(--mint-dk); border-bottom-color:var(--mint); background:var(--mint-lt); }
+.view-tabs{display:flex;border-bottom:1.5px solid var(--border);margin-bottom:1.2rem;overflow-x:auto;scrollbar-width:none;}
+.view-tabs::-webkit-scrollbar{display:none;}
+.view-tab{flex-shrink:0;background:none;border:none;border-bottom:2.5px solid transparent;color:var(--muted);font-family:'Noto Sans KR',sans-serif;font-size:.75rem;font-weight:500;padding:.7rem .9rem .6rem;cursor:pointer;transition:all .15s;white-space:nowrap;margin-bottom:-1.5px;}
+.view-tab.active{color:var(--mint-dk);border-bottom-color:var(--mint);}
 
 /* 요약 */
-.summary-row { display:grid; grid-template-columns:repeat(3,1fr); gap:.65rem; margin-bottom:1.2rem; }
-.summary-card { background:var(--bg2); border:1.5px solid var(--border); border-radius:12px; padding:.8rem; text-align:center; }
-.summary-num { font-size:1.4rem; font-weight:700; color:var(--mint-dk); }
-.summary-label { font-size:.66rem; color:var(--muted); margin-top:.2rem; }
+.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;margin-bottom:1.2rem;}
+.summary-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:.8rem;text-align:center;}
+.summary-num{font-size:1.3rem;font-weight:700;color:var(--mint-dk);}
+.summary-label{font-size:.66rem;color:var(--muted);margin-top:.2rem;}
 
-/* 참여 현황 탭 */
-.grade-section { margin-bottom:1rem; border-radius:12px; overflow:hidden; border:1.5px solid var(--border); }
-.grade-header {
-  display:flex; align-items:center; gap:.6rem;
-  background:var(--bg2); padding:.75rem 1rem; border-bottom:1.5px solid var(--border);
-}
-.grade-title { font-size:.88rem; font-weight:700; min-width:52px; }
-.grade-count { font-size:.74rem; color:var(--muted); min-width:40px; }
-.grade-progress-bar { flex:1; height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
-.grade-progress-fill { height:100%; background:var(--mint); border-radius:3px; transition:width .4s; }
-.check-all-btn {
-  background:var(--mint-lt); border:1.5px solid #b0e0d4; border-radius:20px;
-  color:var(--mint-dk); font-family:'Noto Sans KR',sans-serif; font-size:.68rem; font-weight:600;
-  padding:.28rem .7rem; cursor:pointer; white-space:nowrap; transition:background .15s;
-}
-.check-all-btn:hover { background:#c4ede4; }
-.uncheck-all-btn {
-  background:var(--red-lt); border:1.5px solid #f5c0c0; border-radius:20px;
-  color:var(--red); font-family:'Noto Sans KR',sans-serif; font-size:.68rem; font-weight:600;
-  padding:.28rem .7rem; cursor:pointer; white-space:nowrap; transition:background .15s;
-}
-.uncheck-all-btn:hover { background:#fdd0d0; }
+/* 학년 섹션 */
+.grade-section{margin-bottom:1rem;border-radius:12px;overflow:hidden;border:1.5px solid var(--border);}
+.grade-header{display:flex;align-items:center;gap:.7rem;background:var(--bg2);padding:.75rem 1rem;border-bottom:1.5px solid var(--border);cursor:pointer;user-select:none;}
+.grade-header:hover{background:var(--bg3);}
+.grade-title{font-size:.9rem;font-weight:700;}
+.grade-avg{font-size:.74rem;color:var(--muted);margin-left:.3rem;}
+.grade-bar-wrap{flex:1;}
+.grade-bar-bg{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.grade-bar-fill{height:100%;border-radius:3px;transition:width .5s;}
+.grade-toggle{font-size:.75rem;color:var(--muted);margin-left:auto;}
 
-.student-grid {
-  background:var(--bg2); padding:.75rem;
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:.45rem;
-}
-.student-chip {
-  display:flex; align-items:center; gap:.35rem;
-  background:var(--bg3); border:1.5px solid var(--border); border-radius:8px;
-  padding:.42rem .55rem; cursor:pointer; transition:all .15s; user-select:none;
-}
-.student-chip.done { background:var(--mint-lt); border-color:var(--mint); }
-.chip-check {
-  width:15px; height:15px; border-radius:50%; border:1.5px solid var(--border);
-  flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:8px;
-  transition:all .15s;
-}
-.student-chip.done .chip-check { background:var(--mint); border-color:var(--mint); color:#fff; }
-.chip-name { font-size:.76rem; font-weight:500; }
-.no-students { padding:1.2rem; text-align:center; color:var(--muted); font-size:.8rem; }
+/* 학생 테이블 */
+.student-table{width:100%;background:var(--bg2);}
+.student-table-head{display:grid;padding:.5rem 1rem;border-bottom:1.5px solid var(--border);background:var(--bg3);}
+.student-table-row{display:grid;padding:.55rem 1rem;border-bottom:1px solid var(--border);align-items:center;}
+.student-table-row:last-child{border-bottom:none;}
+.student-name-cell{font-size:.82rem;font-weight:500;}
+.col-label{font-size:.65rem;color:var(--muted);font-weight:600;letter-spacing:.05em;text-align:center;}
 
-/* 명단 관리 탭 */
-.roster-section { margin-bottom:1rem; border-radius:12px; overflow:hidden; border:1.5px solid var(--border); }
-.roster-header { background:var(--bg2); padding:.75rem 1rem; border-bottom:1.5px solid var(--border); font-size:.88rem; font-weight:700; display:flex; align-items:center; justify-content:space-between; }
-.roster-header span { font-size:.74rem; color:var(--muted); font-weight:400; }
-.roster-body { background:var(--bg2); }
+/* 미션 셀 */
+.mission-cell{display:flex;flex-direction:column;align-items:center;gap:3px;}
+/* 완료형 */
+.check-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;}
+.check-btn.done{background:var(--mint-lt);border-color:var(--mint);color:var(--mint-dk);}
+/* 횟수형 */
+.count-ctrl{display:flex;align-items:center;gap:3px;}
+.count-btn{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg3);cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.count-btn:hover{background:var(--mint-lt);border-color:var(--mint);}
+.count-num{font-size:.8rem;font-weight:700;min-width:20px;text-align:center;color:var(--mint-dk);}
+.count-num.zero{color:var(--muted);font-weight:400;}
 
-.name-row {
-  display:flex; align-items:center; gap:.5rem;
-  padding:.5rem .85rem; border-bottom:1px solid var(--border);
-}
-.name-row:last-child { border-bottom:none; }
-.name-text { flex:1; font-size:.84rem; }
-.del-btn {
-  background:none; border:none; color:#ccc; font-size:.8rem; cursor:pointer;
-  padding:.2rem .4rem; border-radius:5px; transition:all .15s; flex-shrink:0;
-}
-.del-btn:hover { background:var(--red-lt); color:var(--red); }
+/* 미션 설정 */
+.mission-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:.85rem;}
+.mission-card-head{padding:.75rem 1rem;border-bottom:1.5px solid var(--border);font-size:.85rem;font-weight:700;}
+.mission-card-body{padding:.85rem 1rem;}
+.mission-row{display:flex;align-items:center;gap:.6rem;padding:.45rem 0;border-bottom:1px solid var(--border);}
+.mission-row:last-child{border-bottom:none;}
+.mission-row-name{flex:1;font-size:.84rem;font-weight:500;}
+.mission-row-type{display:flex;gap:.3rem;}
+.type-btn{font-size:.65rem;font-weight:600;padding:.28rem .65rem;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);background:var(--bg3);color:var(--muted);transition:all .15s;}
+.type-btn.active-check{background:var(--mint-lt);border-color:var(--mint);color:var(--mint-dk);}
+.type-btn.active-count{background:var(--gold-lt);border-color:#f0d080;color:var(--gold);}
+.mission-del-btn{background:none;border:none;color:#ccc;cursor:pointer;font-size:.8rem;padding:.2rem .35rem;border-radius:5px;}
+.mission-del-btn:hover{background:var(--red-lt);color:var(--red);}
+.mission-fixed-tag{font-size:.62rem;color:var(--muted);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:2px 7px;}
+.add-mission-row{display:flex;gap:.45rem;margin-top:.85rem;}
+.add-mission-row input{flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.82rem;padding:.42rem .65rem;outline:none;transition:border-color .15s;}
+.add-mission-row input:focus{border-color:var(--mint);}
+.add-btn{background:var(--mint);border:none;border-radius:8px;color:#fff;font-family:'Noto Sans KR',sans-serif;font-size:.78rem;font-weight:600;padding:.42rem .85rem;cursor:pointer;white-space:nowrap;}
+.add-btn:hover{background:var(--mint-dk);}
 
-.add-row {
-  display:flex; gap:.45rem; padding:.65rem .85rem;
-  border-top:1.5px solid var(--border); background:var(--bg3);
-}
-.add-row input {
-  flex:1; background:var(--bg2); border:1.5px solid var(--border); border-radius:8px;
-  color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:.82rem;
-  padding:.42rem .65rem; outline:none; transition:border-color .15s;
-}
-.add-row input:focus { border-color:var(--mint); }
-.add-btn {
-  background:var(--mint); border:none; border-radius:8px; color:#fff;
-  font-family:'Noto Sans KR',sans-serif; font-size:.78rem; font-weight:600;
-  padding:.42rem .85rem; cursor:pointer; transition:background .15s; white-space:nowrap;
-}
-.add-btn:hover { background:var(--mint-dk); }
+/* 학생 명단 */
+.roster-section{margin-bottom:1rem;border-radius:12px;overflow:hidden;border:1.5px solid var(--border);}
+.roster-header{background:var(--bg2);padding:.75rem 1rem;border-bottom:1.5px solid var(--border);font-size:.88rem;font-weight:700;display:flex;align-items:center;justify-content:space-between;}
+.roster-header span{font-size:.74rem;color:var(--muted);font-weight:400;}
+.name-row{display:flex;align-items:center;padding:.5rem .85rem;border-bottom:1px solid var(--border);background:var(--bg2);}
+.name-row:last-child{border-bottom:none;}
+.name-text{flex:1;font-size:.84rem;}
+.del-btn{background:none;border:none;color:#ccc;font-size:.8rem;cursor:pointer;padding:.2rem .4rem;border-radius:5px;}
+.del-btn:hover{background:var(--red-lt);color:var(--red);}
+.add-row{display:flex;gap:.45rem;padding:.65rem .85rem;border-top:1.5px solid var(--border);background:var(--bg3);}
+.add-row input{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.82rem;padding:.42rem .65rem;outline:none;}
+.add-row input:focus{border-color:var(--mint);}
 
-/* 위험 구역 */
-.danger-zone { margin-top:2rem; padding-top:1.2rem; border-top:1.5px dashed #f0d0d0; }
-.danger-label { font-size:.68rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.75rem; }
-.reset-btn {
-  background:none; border:1.5px solid #f5c0c0; border-radius:20px;
-  color:var(--red); font-family:'Noto Sans KR',sans-serif; font-size:.8rem;
-  padding:.42rem 1rem; cursor:pointer; transition:all .15s;
-}
-.reset-btn:hover { background:var(--red-lt); }
+/* 댓글 */
+.comment-issue-sec{margin-bottom:1rem;border-radius:12px;overflow:hidden;border:1.5px solid var(--border);}
+.comment-issue-head{background:var(--bg2);padding:.75rem 1rem;border-bottom:1.5px solid var(--border);font-size:.88rem;font-weight:700;display:flex;align-items:center;justify-content:space-between;}
+.comment-issue-head span{font-size:.74rem;color:var(--muted);font-weight:400;}
+.comment-mgr-item{display:flex;align-items:flex-start;gap:.7rem;padding:.75rem 1rem;border-bottom:1px solid var(--border);background:var(--bg2);}
+.comment-mgr-item:last-child{border-bottom:none;}
+.comment-mgr-meta{font-size:.7rem;color:var(--muted);margin-bottom:3px;}
+.comment-mgr-meta strong{color:var(--text);font-weight:600;}
+.comment-mgr-text{font-size:.84rem;line-height:1.5;word-break:keep-all;}
+.comment-del-btn{flex-shrink:0;background:none;border:1.5px solid #f5c0c0;border-radius:8px;color:var(--red);font-family:'Noto Sans KR',sans-serif;font-size:.72rem;padding:.3rem .6rem;cursor:pointer;margin-left:auto;}
+.comment-del-btn:hover{background:var(--red-lt);}
 
-/* 댓글 관리 */
-.comment-issue-section { margin-bottom:1rem; border-radius:12px; overflow:hidden; border:1.5px solid var(--border); }
-.comment-issue-header {
-  background:var(--bg2); padding:.75rem 1rem; border-bottom:1.5px solid var(--border);
-  font-size:.88rem; font-weight:700; display:flex; align-items:center; justify-content:space-between;
-}
-.comment-issue-header span { font-size:.74rem; color:var(--muted); font-weight:400; }
-.comment-mgr-item {
-  display:flex; align-items:flex-start; gap:.7rem;
-  padding:.75rem 1rem; border-bottom:1px solid var(--border); background:var(--bg2);
-}
-.comment-mgr-item:last-child { border-bottom:none; }
-.comment-mgr-meta { font-size:.7rem; color:var(--muted); margin-bottom:3px; }
-.comment-mgr-meta strong { color:var(--text); font-weight:600; }
-.comment-mgr-text { font-size:.84rem; color:var(--text); line-height:1.5; word-break:keep-all; }
-.comment-del-btn {
-  flex-shrink:0; background:none; border:1.5px solid #f5c0c0; border-radius:8px;
-  color:var(--red); font-family:'Noto Sans KR',sans-serif; font-size:.72rem;
-  padding:.3rem .6rem; cursor:pointer; transition:all .15s; margin-left:auto;
-}
-.comment-del-btn:hover { background:var(--red-lt); }
-.no-comments-msg { padding:1.2rem; text-align:center; color:var(--muted); font-size:.8rem; }
-.comment-loading { padding:1.5rem; text-align:center; color:var(--muted); font-size:.82rem; }
+.empty-msg{padding:1.2rem;text-align:center;color:var(--muted);font-size:.8rem;}
+.danger-zone{margin-top:2rem;padding-top:1.2rem;border-top:1.5px dashed #f0d0d0;}
+.danger-label{font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;}
+.reset-btn{background:none;border:1.5px solid #f5c0c0;border-radius:20px;color:var(--red);font-family:'Noto Sans KR',sans-serif;font-size:.8rem;padding:.42rem 1rem;cursor:pointer;}
+.reset-btn:hover{background:var(--red-lt);}
 
-/* 토스트 */
-.toast {
-  position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(20px);
-  background:#2d3a2e; color:#fff; font-size:.82rem; padding:.6rem 1.2rem;
-  border-radius:20px; opacity:0; transition:all .25s; pointer-events:none; white-space:nowrap; z-index:999;
-}
-.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#2d3a2e;color:#fff;font-size:.82rem;padding:.6rem 1.2rem;border-radius:20px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
@@ -219,8 +145,7 @@ body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-
     <div class="login-icon">🌿</div>
     <div class="login-title">건강여권 관리자</div>
     <div class="login-sub">소요도서관 · 보건 선생님 전용</div>
-    <input type="password" id="pw-input" placeholder="비밀번호"
-      onkeydown="if(event.key==='Enter')tryLogin()">
+    <input type="password" id="pw-input" placeholder="비밀번호" onkeydown="if(event.key==='Enter')tryLogin()">
     <button class="login-btn" onclick="tryLogin()">로그인</button>
     <div class="login-error" id="login-error"></div>
     <a class="back-link" href="index.html">← 메인으로 돌아가기</a>
@@ -233,34 +158,51 @@ body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-
     <div class="admin-title">🌿 건강여권 <em>관리자</em></div>
     <button class="logout-btn" onclick="logout()">로그아웃</button>
   </div>
-
-  <!-- 탭 -->
   <div class="view-tabs">
-    <button class="view-tab active" onclick="switchView('passport')">✓ 참여 현황</button>
-    <button class="view-tab" onclick="switchView('roster')">👤 학생 명단</button>
-    <button class="view-tab" onclick="switchView('comments')">💬 댓글 관리</button>
+    <button class="view-tab active"  onclick="switchView('passport')">✓ 참여 현황</button>
+    <button class="view-tab"         onclick="switchView('missions')">🎯 미션 설정</button>
+    <button class="view-tab"         onclick="switchView('roster')">👤 학생 명단</button>
+    <button class="view-tab"         onclick="switchView('comments')">💬 댓글 관리</button>
   </div>
 
-  <!-- 참여 현황 뷰 -->
+  <!-- 참여 현황 -->
   <div id="view-passport">
     <div class="summary-row">
-      <div class="summary-card"><div class="summary-num" id="s-total">—</div><div class="summary-label">전체 학생</div></div>
-      <div class="summary-card"><div class="summary-num" id="s-done">—</div><div class="summary-label">참여 완료</div></div>
-      <div class="summary-card"><div class="summary-num" id="s-rate">—</div><div class="summary-label">참여율</div></div>
+      <div class="summary-card"><div class="summary-num" id="s-students">—</div><div class="summary-label">전체 학생</div></div>
+      <div class="summary-card"><div class="summary-num" id="s-missions">—</div><div class="summary-label">미션 종류</div></div>
+      <div class="summary-card"><div class="summary-num" id="s-avg">—</div><div class="summary-label">전체 평균</div></div>
     </div>
     <div id="grade-list"></div>
     <div class="danger-zone">
       <div class="danger-label">⚠ 위험 구역</div>
-      <button class="reset-btn" onclick="resetPassport()">전체 참여 현황 초기화</button>
+      <button class="reset-btn" onclick="resetAll()">전체 참여 현황 초기화</button>
     </div>
   </div>
 
-  <!-- 명단 관리 뷰 -->
+  <!-- 미션 설정 -->
+  <div id="view-missions" style="display:none;">
+    <div class="mission-card">
+      <div class="mission-card-head">미션 목록 &amp; 유형 설정</div>
+      <div class="mission-card-body">
+        <div id="mission-list-admin"></div>
+        <div class="add-mission-row">
+          <input type="text" id="mission-input" placeholder="새 미션 이름 (예: 걷기)" maxlength="10"
+            onkeydown="if(event.key==='Enter')addMission()">
+          <button class="add-btn" onclick="addMission()">+ 추가</button>
+        </div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:.7rem;">
+          ✓ 완료형: 했다/안했다 &nbsp;·&nbsp; # 횟수형: 며칠 했는지 숫자로
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 학생 명단 -->
   <div id="view-roster" style="display:none;">
     <div id="roster-list"></div>
   </div>
 
-  <!-- 댓글 관리 뷰 -->
+  <!-- 댓글 관리 -->
   <div id="view-comments" style="display:none;">
     <div id="comment-mgr"></div>
   </div>
@@ -270,7 +212,7 @@ body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, onValue, set, remove, push }
+import { getDatabase, ref, onValue, set, push }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
 const firebaseConfig = {
@@ -282,18 +224,22 @@ const firebaseConfig = {
   messagingSenderId: "340555302963",
   appId: "1:340555302963:web:a995d5f63e372a409dfb46"
 };
-
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-// ★ 관리자 비밀번호
 const ADMIN_PW = "0000";
+const GRADES   = ['1학년','2학년','3학년','4학년','5학년','6학년'];
+const FIXED_MISSIONS = ['프로타주','유연성','균형'];
 
-const GRADES = ['1학년','2학년','3학년','4학년','5학년','6학년'];
+// Firebase 구조:
+// missions/ { 프로타주:{type:'check'}, 유연성:{type:'count'}, 걷기:{type:'count'} }
+// passport/ { 1학년:{ 홍길동:{ 프로타주:true, 유연성:12, 걷기:8 } } }
+// roster/   { 1학년:{ '-key':'홍길동' } }
 
-// Firebase에서 실시간으로 불러오는 데이터
-let passportData = {};   // { '1학년': { '홍길동': true }, ... }
-let rosterData   = {};   // { '1학년': { '-abc': '홍길동' }, ... }  (Firebase push key 사용)
+let missionData  = {};
+let passportData = {};
+let rosterData   = {};
+let expandedGrade = null;
 
 /* ── 로그인 ── */
 window.tryLogin = function() {
@@ -308,117 +254,251 @@ window.tryLogin = function() {
     document.getElementById('pw-input').focus();
   }
 };
-
 window.logout = function() {
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('admin-screen').style.display = 'none';
   document.getElementById('pw-input').value = '';
 };
 
-/* ── 탭 전환 ── */
+/* ── 탭 ── */
 window.switchView = function(view) {
-  document.getElementById('view-passport').style.display = view==='passport' ? 'block' : 'none';
-  document.getElementById('view-roster').style.display   = view==='roster'   ? 'block' : 'none';
-  document.getElementById('view-comments').style.display = view==='comments' ? 'block' : 'none';
-  document.querySelectorAll('.view-tab').forEach((t,i) => {
-    t.classList.toggle('active',
-      (i===0&&view==='passport')||(i===1&&view==='roster')||(i===2&&view==='comments'));
-  });
+  ['passport','missions','roster','comments'].forEach(v =>
+    document.getElementById(`view-${v}`).style.display = v===view?'block':'none');
+  document.querySelectorAll('.view-tab').forEach((t,i) =>
+    t.classList.toggle('active',['passport','missions','roster','comments'][i]===view));
   if (view==='comments') renderComments();
 };
 
-/* ── 초기화 ── */
+/* ── Firebase 구독 ── */
 function initAdmin() {
-  // 명단 구독 (roster/)
-  onValue(ref(db,'roster'), snap => {
-    rosterData = snap.val() || {};
-    renderAll();
+  onValue(ref(db,'missions'), snap => {
+    missionData = snap.val() || {};
+    // 미션이 없으면 기본값 세팅
+    if (!Object.keys(missionData).length) {
+      const defaults = { 프로타주:{type:'check'}, 유연성:{type:'count'}, 균형:{type:'count'} };
+      set(ref(db,'missions'), defaults);
+    }
+    renderPassport(); renderMissionsAdmin();
   });
-  // 참여 현황 구독 (passport/)
-  onValue(ref(db,'passport'), snap => {
-    passportData = snap.val() || {};
-    renderAll();
-  });
+  onValue(ref(db,'passport'), snap => { passportData = snap.val()||{}; renderPassport(); });
+  onValue(ref(db,'roster'),   snap => { rosterData   = snap.val()||{}; renderPassport(); renderRoster(); });
 }
 
-function getStudentList(grade) {
-  // rosterData[grade] = { '-key1': '홍길동', '-key2': '김철수' }
-  const gradeRoster = rosterData[grade] || {};
-  return Object.entries(gradeRoster); // [[ key, name ], ...]
+/* ── 헬퍼 ── */
+function getMissions()       { return Object.entries(missionData).filter(([,v])=>v); }
+function getStudents(grade)  { return Object.entries(rosterData[grade]||{}); } // [[key,name]]
+function getVal(grade,name,m){ return passportData[grade]?.[name]?.[m] ?? (missionData[m]?.type==='count'?0:false); }
+
+// 학생 점수: 횟수형은 합산, 완료형은 1로 카운트
+function studentScore(grade, name) {
+  return getMissions().reduce((sum,[m,info]) => {
+    const v = getVal(grade,name,m);
+    return sum + (info.type==='count' ? (v||0) : (v?1:0));
+  }, 0);
+}
+// 학년 평균: 횟수형 미션들만 평균
+function gradeAvg(grade) {
+  const students = getStudents(grade);
+  if (!students.length) return 0;
+  const countMissions = getMissions().filter(([,v])=>v.type==='count');
+  if (!countMissions.length) return 0;
+  const total = students.reduce((sum,[,name]) => {
+    return sum + countMissions.reduce((s,[m]) => s + (getVal(grade,name,m)||0), 0);
+  }, 0);
+  return (total / students.length).toFixed(1);
 }
 
-function renderAll() {
-  renderPassport();
-  renderRoster();
-}
-
-/* ── 참여 현황 렌더 ── */
+/* ── 참여 현황 ── */
 function renderPassport() {
-  let totalAll=0, totalDone=0;
-  GRADES.forEach(g => {
-    const students = getStudentList(g);
-    const done = passportData[g] ? Object.keys(passportData[g]).length : 0;
-    totalAll += students.length;
-    totalDone += done;
-  });
-  document.getElementById('s-total').textContent = totalAll;
-  document.getElementById('s-done').textContent  = totalDone;
-  document.getElementById('s-rate').textContent  = totalAll ? Math.round(totalDone/totalAll*100)+'%' : '0%';
+  const missions = getMissions();
+  const countMissions = missions.filter(([,v])=>v.type==='count');
+  let totalStudents = 0;
+  GRADES.forEach(g => { totalStudents += getStudents(g).length; });
+
+  const allAvgs = GRADES.map(g => parseFloat(gradeAvg(g)));
+  const overallAvg = allAvgs.length ? (allAvgs.reduce((a,b)=>a+b,0)/allAvgs.filter(v=>v>0||true).length).toFixed(1) : 0;
+
+  document.getElementById('s-students').textContent = totalStudents;
+  document.getElementById('s-missions').textContent = missions.length;
+  document.getElementById('s-avg').textContent = overallAvg;
+
+  // 학년 정렬 (횟수형 평균 기준)
+  const ranked = GRADES.map(g => ({grade:g, avg:parseFloat(gradeAvg(g)), count:getStudents(g).length}))
+    .sort((a,b) => b.avg - a.avg);
+
+  const maxAvg = Math.max(...ranked.map(r=>r.avg), 1);
+  const BAR_COLORS = ['#e8a932','#9e9e9e','#a0714a','#52b99e','#7bab8b','#6ab4d8'];
+  const MEDALS = ['🥇','🥈','🥉','','',''];
 
   const container = document.getElementById('grade-list');
   container.innerHTML = '';
-  GRADES.forEach(grade => {
-    const students  = getStudentList(grade); // [[key, name], ...]
-    const gradeData = passportData[grade] || {};
-    const done      = Object.keys(gradeData).length;
-    const total     = students.length;
-    const pct       = total ? Math.round(done/total*100) : 0;
 
-    const chips = students.length === 0
-      ? `<div class="no-students">명단에 학생이 없어요. 학생 명단 탭에서 추가해주세요.</div>`
-      : students.map(([key, name]) => {
-          const isDone = !!gradeData[name];
-          return `<div class="student-chip ${isDone?'done':''}" onclick="window.toggleStudent('${grade}','${name}')">
-            <div class="chip-check">${isDone?'✓':''}</div>
-            <div class="chip-name">${esc(name)}</div>
+  ranked.forEach(({grade, avg, count}, idx) => {
+    const students = getStudents(grade);
+    const isExpanded = expandedGrade === grade;
+    const pct = maxAvg > 0 ? Math.round(avg/maxAvg*100) : 0;
+
+    // 학생 행 헤더
+    const colTemplate = `80px repeat(${missions.length}, 1fr)`;
+    const headCols = `<span class="col-label" style="text-align:left;">이름</span>`
+      + missions.map(([m,info]) =>
+          `<span class="col-label">${m}<br><span style="color:${info.type==='count'?'var(--gold)':'var(--mint-dk)'};">${info.type==='count'?'#':'✓'}</span></span>`
+        ).join('');
+
+    const studentRows = students.length === 0
+      ? `<div class="empty-msg">명단에 학생이 없어요.</div>`
+      : students.map(([,name]) => {
+          const cells = missions.map(([m,info]) => {
+            const val = getVal(grade,name,m);
+            if (info.type === 'check') {
+              return `<div class="mission-cell">
+                <div class="check-btn ${val?'done':''}" onclick="window.toggleCheck('${grade}','${name}','${m}')">${val?'✓':''}</div>
+              </div>`;
+            } else {
+              return `<div class="mission-cell">
+                <div class="count-ctrl">
+                  <button class="count-btn" onclick="window.changeCount('${grade}','${name}','${m}',-1)">−</button>
+                  <span class="count-num ${!val?'zero':''}">${val||0}</span>
+                  <button class="count-btn" onclick="window.changeCount('${grade}','${name}','${m}',1)">+</button>
+                </div>
+              </div>`;
+            }
+          }).join('');
+          return `<div class="student-table-row" style="grid-template-columns:${colTemplate};">
+            <div class="student-name-cell">${esc(name)}</div>${cells}
           </div>`;
         }).join('');
 
     const sec = document.createElement('div');
     sec.className = 'grade-section';
     sec.innerHTML = `
-      <div class="grade-header">
-        <div class="grade-title">${grade}</div>
-        <div class="grade-count">${done}/${total}명</div>
-        <div class="grade-progress-bar"><div class="grade-progress-fill" style="width:${pct}%"></div></div>
-        <button class="check-all-btn" onclick="window.checkAll('${grade}')">전체 ✓</button>
-        <button class="uncheck-all-btn" onclick="window.uncheckAll('${grade}')">전체 취소</button>
+      <div class="grade-header" onclick="window.toggleGrade('${grade}')">
+        <span style="font-size:1rem;min-width:22px;">${MEDALS[idx]||''}</span>
+        <span class="grade-title">${grade}</span>
+        <span class="grade-avg">평균 ${avg}일</span>
+        <div class="grade-bar-wrap">
+          <div class="grade-bar-bg">
+            <div class="grade-bar-fill" style="width:${pct}%;background:${BAR_COLORS[idx]};"></div>
+          </div>
+        </div>
+        <span class="grade-toggle">${isExpanded?'▲':'▼'}</span>
       </div>
-      <div class="student-grid">${chips}</div>`;
+      ${isExpanded ? `
+        <div class="student-table-head" style="grid-template-columns:${colTemplate};">${headCols}</div>
+        ${studentRows}
+        ${students.length>0 ? `
+          <div style="display:flex;gap:.5rem;padding:.7rem 1rem;background:var(--bg3);flex-wrap:wrap;">
+            <button class="add-btn" style="font-size:.7rem;padding:.3rem .75rem;"
+              onclick="event.stopPropagation();window.checkAllGrade('${grade}')">완료형 전체 ✓</button>
+            <button style="background:var(--red-lt);border:1.5px solid #f5c0c0;border-radius:8px;color:var(--red);font-family:'Noto Sans KR',sans-serif;font-size:.7rem;padding:.3rem .75rem;cursor:pointer;"
+              onclick="event.stopPropagation();window.resetGrade('${grade}')">이 학년 초기화</button>
+          </div>` : ''}
+      ` : ''}`;
     container.appendChild(sec);
   });
 }
 
-/* ── 명단 렌더 ── */
+window.toggleGrade = function(grade) {
+  expandedGrade = expandedGrade===grade ? null : grade;
+  renderPassport();
+};
+
+window.toggleCheck = async function(grade, name, mission) {
+  const cur = getVal(grade,name,mission);
+  await set(ref(db,`passport/${grade}/${name}/${mission}`), cur ? null : true);
+  showToast(cur ? `${name} · ${mission} 취소` : `${name} · ${mission} 완료 ✓`);
+};
+
+window.changeCount = async function(grade, name, mission, delta) {
+  const cur = parseInt(getVal(grade,name,mission))||0;
+  const next = Math.max(0, cur+delta);
+  await set(ref(db,`passport/${grade}/${name}/${mission}`), next||null);
+};
+
+window.checkAllGrade = async function(grade) {
+  const students = getStudents(grade);
+  const checkMs  = getMissions().filter(([,v])=>v.type==='check');
+  for (const [,name] of students) {
+    for (const [m] of checkMs) {
+      await set(ref(db,`passport/${grade}/${name}/${m}`), true);
+    }
+  }
+  showToast(`${grade} 완료형 전체 ✓`);
+};
+
+window.resetGrade = async function(grade) {
+  if (!confirm(`${grade} 전체를 초기화할까요?`)) return;
+  await set(ref(db,`passport/${grade}`), null);
+  showToast(`${grade} 초기화`);
+};
+
+window.resetAll = async function() {
+  if (!confirm('정말 전체 참여 현황을 초기화할까요?')) return;
+  await set(ref(db,'passport'), null);
+  showToast('전체 초기화');
+};
+
+/* ── 미션 설정 ── */
+function renderMissionsAdmin() {
+  const missions = getMissions();
+  const list = document.getElementById('mission-list-admin');
+  list.innerHTML = missions.map(([m, info]) => {
+    const isFixed = FIXED_MISSIONS.includes(m);
+    return `<div class="mission-row">
+      <span class="mission-row-name">${esc(m)}</span>
+      <div class="mission-row-type">
+        <button class="type-btn ${info.type==='check'?'active-check':''}"
+          onclick="window.setMissionType('${m}','check')">✓ 완료형</button>
+        <button class="type-btn ${info.type==='count'?'active-count':''}"
+          onclick="window.setMissionType('${m}','count')"># 횟수형</button>
+      </div>
+      ${isFixed
+        ? '<span class="mission-fixed-tag">고정</span>'
+        : `<button class="mission-del-btn" onclick="window.removeMission('${m}')">✕</button>`}
+    </div>`;
+  }).join('');
+}
+
+window.setMissionType = async function(name, type) {
+  await set(ref(db,`missions/${name}/type`), type);
+  showToast(`'${name}' → ${type==='check'?'완료형':'횟수형'}`);
+};
+
+window.addMission = async function() {
+  const input = document.getElementById('mission-input');
+  const name  = input.value.trim();
+  if (!name) return;
+  if (missionData[name]) { showToast('이미 있는 미션이에요'); return; }
+  await set(ref(db,`missions/${name}`), {type:'count'});
+  input.value = '';
+  showToast(`'${name}' 추가됨`);
+};
+
+window.removeMission = async function(name) {
+  if (FIXED_MISSIONS.includes(name)) return;
+  if (!confirm(`'${name}' 미션을 삭제할까요?`)) return;
+  await set(ref(db,`missions/${name}`), null);
+  showToast(`'${name}' 삭제됨`);
+};
+
+/* ── 학생 명단 ── */
 function renderRoster() {
   const container = document.getElementById('roster-list');
   container.innerHTML = '';
   GRADES.forEach(grade => {
-    const students = getStudentList(grade);
-    const rows = students.length === 0
-      ? `<div class="no-students">아직 학생이 없어요.</div>`
-      : students.map(([key, name]) =>
+    const students = getStudents(grade);
+    const rows = students.length===0
+      ? '<div class="empty-msg">아직 학생이 없어요.</div>'
+      : students.map(([key,name])=>
           `<div class="name-row">
-            <div class="name-text">${esc(name)}</div>
+            <span class="name-text">${esc(name)}</span>
             <button class="del-btn" onclick="window.deleteStudent('${grade}','${key}','${esc(name)}')">✕</button>
-          </div>`
-        ).join('');
-
+          </div>`).join('');
     const sec = document.createElement('div');
     sec.className = 'roster-section';
     sec.innerHTML = `
       <div class="roster-header">${grade} <span>${students.length}명</span></div>
-      <div class="roster-body">${rows}</div>
+      <div>${rows}</div>
       <div class="add-row">
         <input type="text" id="add-${grade}" placeholder="이름 입력 후 추가" maxlength="10"
           onkeydown="if(event.key==='Enter')window.addStudent('${grade}')">
@@ -428,143 +508,73 @@ function renderRoster() {
   });
 }
 
-/* ── 참여 토글 ── */
-window.toggleStudent = async function(grade, name) {
-  const gradeData = passportData[grade] || {};
-  if (gradeData[name]) {
-    await set(ref(db, `passport/${grade}/${name}`), null);
-    showToast(`${name} 참여 취소`);
-  } else {
-    await set(ref(db, `passport/${grade}/${name}`), true);
-    showToast(`${name} 참여 완료 ✓`);
-  }
-};
-
-window.checkAll = async function(grade) {
-  const students = getStudentList(grade);
-  const updates = {};
-  students.forEach(([_, name]) => { updates[name] = true; });
-  await set(ref(db, `passport/${grade}`), updates);
-  showToast(`${grade} 전체 참여 완료 ✓`);
-};
-
-window.uncheckAll = async function(grade) {
-  if (!confirm(`${grade} 전체 참여를 취소할까요?`)) return;
-  await set(ref(db, `passport/${grade}`), null);
-  showToast(`${grade} 전체 취소`);
-};
-
-/* ── 학생 추가/삭제 ── */
 window.addStudent = async function(grade) {
   const input = document.getElementById(`add-${grade}`);
   const name  = input.value.trim();
   if (!name) return;
-  // 중복 체크
-  const existing = Object.values(rosterData[grade] || {});
+  const existing = Object.values(rosterData[grade]||{});
   if (existing.includes(name)) { showToast('이미 있는 이름이에요'); return; }
-  await push(ref(db, `roster/${grade}`), name);
-  input.value = '';
+  await push(ref(db,`roster/${grade}`), name);
+  input.value='';
   showToast(`${name} 추가됨 ✓`);
 };
 
 window.deleteStudent = async function(grade, key, name) {
-  if (!confirm(`'${name}'을(를) 명단에서 삭제할까요?\n참여 현황도 함께 삭제됩니다.`)) return;
-  await set(ref(db, `roster/${grade}/${key}`), null);
-  await set(ref(db, `passport/${grade}/${name}`), null);
+  if (!confirm(`'${name}'을(를) 삭제할까요?`)) return;
+  await set(ref(db,`roster/${grade}/${key}`), null);
+  await set(ref(db,`passport/${grade}/${name}`), null);
   showToast(`${name} 삭제됨`);
 };
 
-/* ── 전체 초기화 ── */
-window.resetPassport = async function() {
-  if (!confirm('정말 전체 참여 현황을 초기화할까요?\n이 작업은 되돌릴 수 없어요.')) return;
-  await set(ref(db, 'passport'), null);
-  showToast('전체 초기화 완료');
-};
-
-/* ── 토스트 ── */
-let toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
-}
-
 /* ── 댓글 관리 ── */
-// ★ 특보 호수 목록 — 새 호 나올 때마다 추가
-const COMMENT_ISSUES = [
-  { no: 4, label: "제4호 · 지구의 날" },
-];
-
-let commentData = {};  // { issue_4: { key: {grade,name,text,ts} } }
-
+const COMMENT_ISSUES = [{ no:4, label:'제4호 · 지구의 날' }];
 function renderComments() {
   const container = document.getElementById('comment-mgr');
-  container.innerHTML = '<div class="comment-loading">불러오는 중…</div>';
-
-  // 모든 호수 댓글 한번에 구독
+  container.innerHTML = '';
   COMMENT_ISSUES.forEach(issue => {
     const key = `issue_${issue.no}`;
-    onValue(ref(db, `comments/${key}`), snap => {
-      commentData[key] = snap.val() || {};
-      rebuildCommentView();
+    onValue(ref(db,`comments/${key}`), snap => {
+      const data    = snap.val()||{};
+      const entries = Object.entries(data).sort((a,b)=>b[1].ts-a[1].ts);
+      let sec = document.getElementById(`csec-${key}`);
+      if (!sec) { sec=document.createElement('div'); sec.id=`csec-${key}`; sec.className='comment-issue-sec'; container.appendChild(sec); }
+      sec.innerHTML = `
+        <div class="comment-issue-head">${issue.label} <span>${entries.length}개</span></div>
+        ${entries.length===0 ? '<div class="empty-msg">댓글이 없어요.</div>'
+          : entries.map(([ck,c])=>`
+            <div class="comment-mgr-item">
+              <div style="flex:1;min-width:0;">
+                <div class="comment-mgr-meta"><strong>${esc(c.name||'익명')}</strong> · ${esc(c.grade||'')} · ${timeAgo(c.ts)}</div>
+                <div class="comment-mgr-text">${esc(c.text||'')}</div>
+              </div>
+              <button class="comment-del-btn" onclick="window.deleteComment('${key}','${ck}')">삭제</button>
+            </div>`).join('')}`;
     });
   });
 }
-
-function rebuildCommentView() {
-  const container = document.getElementById('comment-mgr');
-  container.innerHTML = '';
-
-  COMMENT_ISSUES.forEach(issue => {
-    const key = `issue_${issue.no}`;
-    const data = commentData[key] || {};
-    const entries = Object.entries(data).sort((a,b) => b[1].ts - a[1].ts);
-
-    const sec = document.createElement('div');
-    sec.className = 'comment-issue-section';
-
-    const rows = entries.length === 0
-      ? `<div class="no-comments-msg">댓글이 없어요.</div>`
-      : entries.map(([ckey, c]) => `
-          <div class="comment-mgr-item">
-            <div style="flex:1;min-width:0;">
-              <div class="comment-mgr-meta">
-                <strong>${esc(c.name||'익명')}</strong> · ${esc(c.grade||'')} · ${timeAgo(c.ts)}
-              </div>
-              <div class="comment-mgr-text">${esc(c.text||'')}</div>
-            </div>
-            <button class="comment-del-btn"
-              onclick="window.deleteComment('${key}','${ckey}')">삭제</button>
-          </div>`
-        ).join('');
-
-    sec.innerHTML = `
-      <div class="comment-issue-header">
-        ${issue.label} <span>${entries.length}개</span>
-      </div>
-      ${rows}`;
-    container.appendChild(sec);
-  });
-}
-
-window.deleteComment = async function(issueKey, commentKey) {
+window.deleteComment = async function(issueKey, ck) {
   if (!confirm('이 댓글을 삭제할까요?')) return;
-  await set(ref(db, `comments/${issueKey}/${commentKey}`), null);
+  await set(ref(db,`comments/${issueKey}/${ck}`), null);
   showToast('댓글 삭제됨');
 };
 
-function timeAgo(ts) {
-  if (!ts) return '';
-  const s = Math.floor((Date.now()-ts)/1000);
-  if (s<60) return '방금 전';
-  if (s<3600) return `${Math.floor(s/60)}분 전`;
-  if (s<86400) return `${Math.floor(s/3600)}시간 전`;
-  return `${Math.floor(s/86400)}일 전`;
+/* ── 유틸 ── */
+let toastTimer;
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
 }
-
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;'); }
+function timeAgo(ts) {
+  if(!ts)return'';
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60)return'방금 전';
+  if(s<3600)return`${Math.floor(s/60)}분 전`;
+  if(s<86400)return`${Math.floor(s/3600)}시간 전`;
+  return`${Math.floor(s/86400)}일 전`;
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;');}
 </script>
 </body>
 </html>
