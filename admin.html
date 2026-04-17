@@ -25,25 +25,24 @@
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:15px; min-height:100vh; }
 
-/* 로그인 화면 */
+/* 로그인 */
 #login-screen {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   min-height:100vh; padding:2rem;
 }
 .login-card {
   background:var(--bg2); border:1.5px solid var(--border); border-radius:18px;
-  padding:2rem 1.8rem; width:100%; max-width:340px;
-  box-shadow:0 4px 20px rgba(82,185,158,.1);
-  text-align:center;
+  padding:2rem 1.8rem; width:100%; max-width:320px;
+  box-shadow:0 4px 20px rgba(82,185,158,.1); text-align:center;
 }
 .login-icon { font-size:2rem; margin-bottom:.8rem; }
-.login-title { font-size:1.1rem; font-weight:700; color:var(--text); margin-bottom:.3rem; }
-.login-sub { font-size:.78rem; color:var(--muted); margin-bottom:1.5rem; }
+.login-title { font-size:1.05rem; font-weight:700; margin-bottom:.3rem; }
+.login-sub { font-size:.76rem; color:var(--muted); margin-bottom:1.5rem; }
 .login-card input {
   width:100%; background:var(--bg3); border:1.5px solid var(--border);
   border-radius:10px; color:var(--text); font-family:'Noto Sans KR',sans-serif;
-  font-size:.9rem; padding:.65rem .9rem; outline:none; margin-bottom:.75rem;
-  text-align:center; letter-spacing:.2em; transition:border-color .15s;
+  font-size:1rem; padding:.65rem .9rem; outline:none; margin-bottom:.75rem;
+  text-align:center; letter-spacing:.3em; transition:border-color .15s;
 }
 .login-card input:focus { border-color:var(--mint); }
 .login-btn {
@@ -53,108 +52,137 @@ body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-
   box-shadow:0 2px 8px rgba(82,185,158,.3);
 }
 .login-btn:hover { background:var(--mint-dk); }
-.login-error { font-size:.78rem; color:var(--red); margin-top:.6rem; min-height:1.2em; }
-.back-link { margin-top:1.2rem; font-size:.75rem; color:var(--muted); cursor:pointer; }
+.login-error { font-size:.76rem; color:var(--red); margin-top:.6rem; min-height:1.1em; }
+.back-link { margin-top:1.2rem; font-size:.74rem; color:var(--muted); cursor:pointer; display:inline-block; }
 .back-link:hover { color:var(--mint-dk); }
 
 /* 관리자 화면 */
-#admin-screen { display:none; max-width:680px; margin:0 auto; padding:1.5rem 1rem 4rem; }
+#admin-screen { display:none; max-width:680px; margin:0 auto; padding:1.2rem 1rem 5rem; }
 
-header {
+.admin-header {
   display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1.5px solid var(--border);
+  margin-bottom:1.2rem; padding-bottom:1rem; border-bottom:1.5px solid var(--border);
 }
-.admin-title { font-size:1rem; font-weight:700; color:var(--text); }
-.admin-title span { color:var(--mint-dk); }
+.admin-title { font-size:1rem; font-weight:700; }
+.admin-title em { color:var(--mint-dk); font-style:normal; }
 .logout-btn {
   background:none; border:1.5px solid var(--border); border-radius:20px;
-  color:var(--muted); font-family:'Noto Sans KR',sans-serif; font-size:.75rem;
-  padding:.35rem .85rem; cursor:pointer; transition:all .15s;
+  color:var(--muted); font-family:'Noto Sans KR',sans-serif; font-size:.74rem;
+  padding:.32rem .8rem; cursor:pointer; transition:all .15s;
 }
 .logout-btn:hover { border-color:var(--pink); color:var(--pink-dk); }
 
-/* 요약 */
-.summary-row { display:grid; grid-template-columns:repeat(3,1fr); gap:.7rem; margin-bottom:1.5rem; }
-.summary-card {
-  background:var(--bg2); border:1.5px solid var(--border); border-radius:12px;
-  padding:.8rem; text-align:center;
+/* 탭 */
+.view-tabs {
+  display:flex; gap:0; border-bottom:1.5px solid var(--border);
+  margin-bottom:1.2rem; background:var(--bg2); border-radius:12px 12px 0 0;
+  overflow:hidden;
 }
-.summary-num { font-size:1.4rem; font-weight:700; color:var(--mint-dk); }
-.summary-label { font-size:.68rem; color:var(--muted); margin-top:.2rem; }
+.view-tab {
+  flex:1; background:none; border:none; border-bottom:2.5px solid transparent;
+  color:var(--muted); font-family:'Noto Sans KR',sans-serif; font-size:.8rem; font-weight:500;
+  padding:.7rem .5rem; cursor:pointer; transition:all .15s; text-align:center;
+}
+.view-tab.active { color:var(--mint-dk); border-bottom-color:var(--mint); background:var(--mint-lt); }
 
-/* 학년 블록 */
-.grade-section { margin-bottom:1.2rem; }
+/* 요약 */
+.summary-row { display:grid; grid-template-columns:repeat(3,1fr); gap:.65rem; margin-bottom:1.2rem; }
+.summary-card { background:var(--bg2); border:1.5px solid var(--border); border-radius:12px; padding:.8rem; text-align:center; }
+.summary-num { font-size:1.4rem; font-weight:700; color:var(--mint-dk); }
+.summary-label { font-size:.66rem; color:var(--muted); margin-top:.2rem; }
+
+/* 참여 현황 탭 */
+.grade-section { margin-bottom:1rem; border-radius:12px; overflow:hidden; border:1.5px solid var(--border); }
 .grade-header {
-  display:flex; align-items:center; justify-content:space-between;
-  background:var(--bg2); border:1.5px solid var(--border); border-radius:12px 12px 0 0;
-  padding:.75rem 1rem;
+  display:flex; align-items:center; gap:.6rem;
+  background:var(--bg2); padding:.75rem 1rem; border-bottom:1.5px solid var(--border);
 }
-.grade-header-left { display:flex; align-items:center; gap:.6rem; }
-.grade-title { font-size:.88rem; font-weight:700; color:var(--text); }
-.grade-count { font-size:.75rem; color:var(--muted); }
-.grade-progress-bar { flex:1; height:6px; background:var(--border); border-radius:3px; margin:0 .8rem; overflow:hidden; }
-.grade-progress-fill { height:100%; background:var(--mint); border-radius:3px; transition:width .3s; }
+.grade-title { font-size:.88rem; font-weight:700; min-width:52px; }
+.grade-count { font-size:.74rem; color:var(--muted); min-width:40px; }
+.grade-progress-bar { flex:1; height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
+.grade-progress-fill { height:100%; background:var(--mint); border-radius:3px; transition:width .4s; }
 .check-all-btn {
   background:var(--mint-lt); border:1.5px solid #b0e0d4; border-radius:20px;
-  color:var(--mint-dk); font-family:'Noto Sans KR',sans-serif; font-size:.7rem; font-weight:600;
-  padding:.3rem .75rem; cursor:pointer; transition:background .15s; white-space:nowrap;
+  color:var(--mint-dk); font-family:'Noto Sans KR',sans-serif; font-size:.68rem; font-weight:600;
+  padding:.28rem .7rem; cursor:pointer; white-space:nowrap; transition:background .15s;
 }
 .check-all-btn:hover { background:#c4ede4; }
+.uncheck-all-btn {
+  background:var(--red-lt); border:1.5px solid #f5c0c0; border-radius:20px;
+  color:var(--red); font-family:'Noto Sans KR',sans-serif; font-size:.68rem; font-weight:600;
+  padding:.28rem .7rem; cursor:pointer; white-space:nowrap; transition:background .15s;
+}
+.uncheck-all-btn:hover { background:#fdd0d0; }
 
 .student-grid {
-  background:var(--bg2); border:1.5px solid var(--border); border-top:none;
-  border-radius:0 0 12px 12px; padding:.8rem;
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:.5rem;
+  background:var(--bg2); padding:.75rem;
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:.45rem;
 }
 .student-chip {
-  display:flex; align-items:center; gap:.4rem;
+  display:flex; align-items:center; gap:.35rem;
   background:var(--bg3); border:1.5px solid var(--border); border-radius:8px;
-  padding:.45rem .6rem; cursor:pointer; transition:all .15s; user-select:none;
+  padding:.42rem .55rem; cursor:pointer; transition:all .15s; user-select:none;
 }
-.student-chip.done {
-  background:var(--mint-lt); border-color:var(--mint);
-}
-.student-chip .chip-check {
-  width:16px; height:16px; border-radius:50%; border:1.5px solid var(--border);
-  flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:9px;
+.student-chip.done { background:var(--mint-lt); border-color:var(--mint); }
+.chip-check {
+  width:15px; height:15px; border-radius:50%; border:1.5px solid var(--border);
+  flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:8px;
   transition:all .15s;
 }
 .student-chip.done .chip-check { background:var(--mint); border-color:var(--mint); color:#fff; }
-.student-chip .chip-name { font-size:.78rem; font-weight:500; color:var(--text); }
+.chip-name { font-size:.76rem; font-weight:500; }
+.no-students { padding:1.2rem; text-align:center; color:var(--muted); font-size:.8rem; }
 
-/* 학생 추가 */
-.add-student-row {
-  background:var(--bg2); border:1.5px solid var(--border); border-top:none;
-  border-radius:0 0 12px 12px; padding:.6rem .8rem;
-  display:flex; gap:.5rem; margin-top:-1px;
+/* 명단 관리 탭 */
+.roster-section { margin-bottom:1rem; border-radius:12px; overflow:hidden; border:1.5px solid var(--border); }
+.roster-header { background:var(--bg2); padding:.75rem 1rem; border-bottom:1.5px solid var(--border); font-size:.88rem; font-weight:700; display:flex; align-items:center; justify-content:space-between; }
+.roster-header span { font-size:.74rem; color:var(--muted); font-weight:400; }
+.roster-body { background:var(--bg2); }
+
+.name-row {
+  display:flex; align-items:center; gap:.5rem;
+  padding:.5rem .85rem; border-bottom:1px solid var(--border);
 }
-.add-student-row input {
-  flex:1; background:var(--bg3); border:1.5px solid var(--border); border-radius:8px;
-  color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:.8rem;
-  padding:.4rem .65rem; outline:none; transition:border-color .15s;
+.name-row:last-child { border-bottom:none; }
+.name-text { flex:1; font-size:.84rem; }
+.del-btn {
+  background:none; border:none; color:#ccc; font-size:.8rem; cursor:pointer;
+  padding:.2rem .4rem; border-radius:5px; transition:all .15s; flex-shrink:0;
 }
-.add-student-row input:focus { border-color:var(--mint); }
+.del-btn:hover { background:var(--red-lt); color:var(--red); }
+
+.add-row {
+  display:flex; gap:.45rem; padding:.65rem .85rem;
+  border-top:1.5px solid var(--border); background:var(--bg3);
+}
+.add-row input {
+  flex:1; background:var(--bg2); border:1.5px solid var(--border); border-radius:8px;
+  color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:.82rem;
+  padding:.42rem .65rem; outline:none; transition:border-color .15s;
+}
+.add-row input:focus { border-color:var(--mint); }
 .add-btn {
   background:var(--mint); border:none; border-radius:8px; color:#fff;
   font-family:'Noto Sans KR',sans-serif; font-size:.78rem; font-weight:600;
-  padding:.4rem .8rem; cursor:pointer; transition:background .15s; white-space:nowrap;
+  padding:.42rem .85rem; cursor:pointer; transition:background .15s; white-space:nowrap;
 }
 .add-btn:hover { background:var(--mint-dk); }
 
-/* 초기화 */
+/* 위험 구역 */
 .danger-zone { margin-top:2rem; padding-top:1.2rem; border-top:1.5px dashed #f0d0d0; }
-.danger-title { font-size:.72rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.8rem; }
+.danger-label { font-size:.68rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.75rem; }
 .reset-btn {
   background:none; border:1.5px solid #f5c0c0; border-radius:20px;
   color:var(--red); font-family:'Noto Sans KR',sans-serif; font-size:.8rem;
-  padding:.45rem 1rem; cursor:pointer; transition:all .15s;
+  padding:.42rem 1rem; cursor:pointer; transition:all .15s;
 }
 .reset-btn:hover { background:var(--red-lt); }
 
+/* 토스트 */
 .toast {
   position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(20px);
   background:#2d3a2e; color:#fff; font-size:.82rem; padding:.6rem 1.2rem;
-  border-radius:20px; opacity:0; transition:all .3s; pointer-events:none; white-space:nowrap;
+  border-radius:20px; opacity:0; transition:all .25s; pointer-events:none; white-space:nowrap; z-index:999;
 }
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 </style>
@@ -167,40 +195,44 @@ header {
     <div class="login-icon">🌿</div>
     <div class="login-title">건강여권 관리자</div>
     <div class="login-sub">소요도서관 · 보건 선생님 전용</div>
-    <input type="password" id="pw-input" placeholder="비밀번호" onkeydown="if(event.key==='Enter')tryLogin()">
+    <input type="password" id="pw-input" placeholder="비밀번호"
+      onkeydown="if(event.key==='Enter')tryLogin()">
     <button class="login-btn" onclick="tryLogin()">로그인</button>
     <div class="login-error" id="login-error"></div>
-    <div class="back-link" onclick="history.back()">← 메인으로 돌아가기</div>
+    <a class="back-link" href="index.html">← 메인으로 돌아가기</a>
   </div>
 </div>
 
 <!-- 관리자 화면 -->
 <div id="admin-screen">
-  <header>
-    <div class="admin-title">🌿 건강여권 <span>관리자</span></div>
+  <div class="admin-header">
+    <div class="admin-title">🌿 건강여권 <em>관리자</em></div>
     <button class="logout-btn" onclick="logout()">로그아웃</button>
-  </header>
+  </div>
 
-  <div class="summary-row">
-    <div class="summary-card">
-      <div class="summary-num" id="s-total">—</div>
-      <div class="summary-label">전체 학생</div>
+  <!-- 탭 -->
+  <div class="view-tabs">
+    <button class="view-tab active" onclick="switchView('passport')">✓ 참여 현황</button>
+    <button class="view-tab" onclick="switchView('roster')">👤 학생 명단</button>
+  </div>
+
+  <!-- 참여 현황 뷰 -->
+  <div id="view-passport">
+    <div class="summary-row">
+      <div class="summary-card"><div class="summary-num" id="s-total">—</div><div class="summary-label">전체 학생</div></div>
+      <div class="summary-card"><div class="summary-num" id="s-done">—</div><div class="summary-label">참여 완료</div></div>
+      <div class="summary-card"><div class="summary-num" id="s-rate">—</div><div class="summary-label">참여율</div></div>
     </div>
-    <div class="summary-card">
-      <div class="summary-num" id="s-done">—</div>
-      <div class="summary-label">참여 완료</div>
-    </div>
-    <div class="summary-card">
-      <div class="summary-num" id="s-rate">—</div>
-      <div class="summary-label">참여율</div>
+    <div id="grade-list"></div>
+    <div class="danger-zone">
+      <div class="danger-label">⚠ 위험 구역</div>
+      <button class="reset-btn" onclick="resetPassport()">전체 참여 현황 초기화</button>
     </div>
   </div>
 
-  <div id="grade-list"></div>
-
-  <div class="danger-zone">
-    <div class="danger-title">⚠ 위험 구역</div>
-    <button class="reset-btn" onclick="resetAll()">전체 참여 현황 초기화</button>
+  <!-- 명단 관리 뷰 -->
+  <div id="view-roster" style="display:none;">
+    <div id="roster-list"></div>
   </div>
 </div>
 
@@ -208,7 +240,7 @@ header {
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, onValue, set, remove, get }
+import { getDatabase, ref, onValue, set, remove, push }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
 const firebaseConfig = {
@@ -224,22 +256,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-// ★ 관리자 비밀번호 — 여기서 변경하세요
-const ADMIN_PW = "soyo2026";
-
-// ★ 학년별 학생 이름 목록 — 실제 명단으로 수정하세요
-const STUDENT_LIST = {
-  '1학년': ['예시1','예시2','예시3','예시4','예시5','예시6','예시7','예시8'],
-  '2학년': ['예시1','예시2','예시3','예시4','예시5','예시6','예시7','예시8','예시9'],
-  '3학년': ['예시1','예시2','예시3','예시4','예시5','예시6','예시7','예시8','예시9','예시10'],
-  '4학년': ['예시1','예시2','예시3','예시4','예시5','예시6','예시7','예시8','예시9'],
-  '5학년': ['예시1','예시2','예시3','예시4','예시5','예시6','예시7','예시8','예시9','예시10'],
-  '6학년': ['예시1','예시2','예시3','예시4','예시5','예시6','예시7','예시8','예시9'],
-};
+// ★ 관리자 비밀번호
+const ADMIN_PW = "0000";
 
 const GRADES = ['1학년','2학년','3학년','4학년','5학년','6학년'];
-let passportData = {};
-let loggedIn = false;
+
+// Firebase에서 실시간으로 불러오는 데이터
+let passportData = {};   // { '1학년': { '홍길동': true }, ... }
+let rosterData   = {};   // { '1학년': { '-abc': '홍길동' }, ... }  (Firebase push key 사용)
 
 /* ── 로그인 ── */
 window.tryLogin = function() {
@@ -247,7 +271,6 @@ window.tryLogin = function() {
   if (pw === ADMIN_PW) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('admin-screen').style.display = 'block';
-    loggedIn = true;
     initAdmin();
   } else {
     document.getElementById('login-error').textContent = '비밀번호가 틀렸어요.';
@@ -257,76 +280,122 @@ window.tryLogin = function() {
 };
 
 window.logout = function() {
-  loggedIn = false;
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('admin-screen').style.display = 'none';
   document.getElementById('pw-input').value = '';
 };
 
-/* ── 관리자 초기화 ── */
+/* ── 탭 전환 ── */
+window.switchView = function(view) {
+  document.getElementById('view-passport').style.display = view==='passport' ? 'block' : 'none';
+  document.getElementById('view-roster').style.display   = view==='roster'   ? 'block' : 'none';
+  document.querySelectorAll('.view-tab').forEach((t,i) => {
+    t.classList.toggle('active', (i===0&&view==='passport')||(i===1&&view==='roster'));
+  });
+};
+
+/* ── 초기화 ── */
 function initAdmin() {
-  onValue(ref(db, 'passport'), snap => {
+  // 명단 구독 (roster/)
+  onValue(ref(db,'roster'), snap => {
+    rosterData = snap.val() || {};
+    renderAll();
+  });
+  // 참여 현황 구독 (passport/)
+  onValue(ref(db,'passport'), snap => {
     passportData = snap.val() || {};
     renderAll();
   });
 }
 
+function getStudentList(grade) {
+  // rosterData[grade] = { '-key1': '홍길동', '-key2': '김철수' }
+  const gradeRoster = rosterData[grade] || {};
+  return Object.entries(gradeRoster); // [[ key, name ], ...]
+}
+
 function renderAll() {
-  let totalAll = 0, totalDone = 0;
+  renderPassport();
+  renderRoster();
+}
+
+/* ── 참여 현황 렌더 ── */
+function renderPassport() {
+  let totalAll=0, totalDone=0;
   GRADES.forEach(g => {
-    const students = STUDENT_LIST[g] || [];
+    const students = getStudentList(g);
     const done = passportData[g] ? Object.keys(passportData[g]).length : 0;
     totalAll += students.length;
     totalDone += done;
   });
   document.getElementById('s-total').textContent = totalAll;
-  document.getElementById('s-done').textContent = totalDone;
-  document.getElementById('s-rate').textContent = totalAll ? Math.round(totalDone/totalAll*100)+'%' : '0%';
+  document.getElementById('s-done').textContent  = totalDone;
+  document.getElementById('s-rate').textContent  = totalAll ? Math.round(totalDone/totalAll*100)+'%' : '0%';
 
-  const gradeList = document.getElementById('grade-list');
-  gradeList.innerHTML = '';
-  GRADES.forEach(grade => renderGrade(grade, gradeList));
-}
+  const container = document.getElementById('grade-list');
+  container.innerHTML = '';
+  GRADES.forEach(grade => {
+    const students  = getStudentList(grade); // [[key, name], ...]
+    const gradeData = passportData[grade] || {};
+    const done      = Object.keys(gradeData).length;
+    const total     = students.length;
+    const pct       = total ? Math.round(done/total*100) : 0;
 
-function renderGrade(grade, container) {
-  const students = STUDENT_LIST[grade] || [];
-  const gradeData = passportData[grade] || {};
-  const doneCount = Object.keys(gradeData).length;
-  const total = students.length;
-  const pct = total ? Math.round(doneCount/total*100) : 0;
+    const chips = students.length === 0
+      ? `<div class="no-students">명단에 학생이 없어요. 학생 명단 탭에서 추가해주세요.</div>`
+      : students.map(([key, name]) => {
+          const isDone = !!gradeData[name];
+          return `<div class="student-chip ${isDone?'done':''}" onclick="window.toggleStudent('${grade}','${name}')">
+            <div class="chip-check">${isDone?'✓':''}</div>
+            <div class="chip-name">${esc(name)}</div>
+          </div>`;
+        }).join('');
 
-  const sec = document.createElement('div');
-  sec.className = 'grade-section';
-  sec.id = `grade-sec-${grade}`;
-
-  // 학생 칩
-  const chips = students.map(name => {
-    const done = !!gradeData[name];
-    return `<div class="student-chip ${done?'done':''}" onclick="window.toggleStudent('${grade}','${name}')">
-      <div class="chip-check">${done?'✓':''}</div>
-      <div class="chip-name">${name}</div>
-    </div>`;
-  }).join('');
-
-  sec.innerHTML = `
-    <div class="grade-header">
-      <div class="grade-header-left">
+    const sec = document.createElement('div');
+    sec.className = 'grade-section';
+    sec.innerHTML = `
+      <div class="grade-header">
         <div class="grade-title">${grade}</div>
-        <div class="grade-count">${doneCount}/${total}명</div>
+        <div class="grade-count">${done}/${total}명</div>
+        <div class="grade-progress-bar"><div class="grade-progress-fill" style="width:${pct}%"></div></div>
+        <button class="check-all-btn" onclick="window.checkAll('${grade}')">전체 ✓</button>
+        <button class="uncheck-all-btn" onclick="window.uncheckAll('${grade}')">전체 취소</button>
       </div>
-      <div class="grade-progress-bar"><div class="grade-progress-fill" style="width:${pct}%"></div></div>
-      <button class="check-all-btn" onclick="window.checkAll('${grade}')">전체 체크</button>
-    </div>
-    <div class="student-grid">${chips}</div>
-    <div class="add-student-row">
-      <input type="text" id="add-input-${grade}" placeholder="이름 추가" maxlength="8"
-        onkeydown="if(event.key==='Enter')window.addStudent('${grade}')">
-      <button class="add-btn" onclick="window.addStudent('${grade}')">추가</button>
-    </div>`;
-  container.appendChild(sec);
+      <div class="student-grid">${chips}</div>`;
+    container.appendChild(sec);
+  });
 }
 
-/* ── 학생 토글 ── */
+/* ── 명단 렌더 ── */
+function renderRoster() {
+  const container = document.getElementById('roster-list');
+  container.innerHTML = '';
+  GRADES.forEach(grade => {
+    const students = getStudentList(grade);
+    const rows = students.length === 0
+      ? `<div class="no-students">아직 학생이 없어요.</div>`
+      : students.map(([key, name]) =>
+          `<div class="name-row">
+            <div class="name-text">${esc(name)}</div>
+            <button class="del-btn" onclick="window.deleteStudent('${grade}','${key}','${esc(name)}')">✕</button>
+          </div>`
+        ).join('');
+
+    const sec = document.createElement('div');
+    sec.className = 'roster-section';
+    sec.innerHTML = `
+      <div class="roster-header">${grade} <span>${students.length}명</span></div>
+      <div class="roster-body">${rows}</div>
+      <div class="add-row">
+        <input type="text" id="add-${grade}" placeholder="이름 입력 후 추가" maxlength="10"
+          onkeydown="if(event.key==='Enter')window.addStudent('${grade}')">
+        <button class="add-btn" onclick="window.addStudent('${grade}')">+ 추가</button>
+      </div>`;
+    container.appendChild(sec);
+  });
+}
+
+/* ── 참여 토글 ── */
 window.toggleStudent = async function(grade, name) {
   const gradeData = passportData[grade] || {};
   if (gradeData[name]) {
@@ -338,41 +407,58 @@ window.toggleStudent = async function(grade, name) {
   }
 };
 
-/* ── 전체 체크 ── */
 window.checkAll = async function(grade) {
-  const students = STUDENT_LIST[grade] || [];
+  const students = getStudentList(grade);
   const updates = {};
-  students.forEach(name => { updates[name] = true; });
+  students.forEach(([_, name]) => { updates[name] = true; });
   await set(ref(db, `passport/${grade}`), updates);
   showToast(`${grade} 전체 참여 완료 ✓`);
 };
 
-/* ── 학생 추가 ── */
+window.uncheckAll = async function(grade) {
+  if (!confirm(`${grade} 전체 참여를 취소할까요?`)) return;
+  await set(ref(db, `passport/${grade}`), null);
+  showToast(`${grade} 전체 취소`);
+};
+
+/* ── 학생 추가/삭제 ── */
 window.addStudent = async function(grade) {
-  const input = document.getElementById(`add-input-${grade}`);
-  const name = input.value.trim();
+  const input = document.getElementById(`add-${grade}`);
+  const name  = input.value.trim();
   if (!name) return;
-  if (STUDENT_LIST[grade].includes(name)) { showToast('이미 있는 이름이에요'); return; }
-  STUDENT_LIST[grade].push(name);
+  // 중복 체크
+  const existing = Object.values(rosterData[grade] || {});
+  if (existing.includes(name)) { showToast('이미 있는 이름이에요'); return; }
+  await push(ref(db, `roster/${grade}`), name);
   input.value = '';
-  showToast(`${name} 추가됨`);
-  renderAll();
+  showToast(`${name} 추가됨 ✓`);
+};
+
+window.deleteStudent = async function(grade, key, name) {
+  if (!confirm(`'${name}'을(를) 명단에서 삭제할까요?\n참여 현황도 함께 삭제됩니다.`)) return;
+  await set(ref(db, `roster/${grade}/${key}`), null);
+  await set(ref(db, `passport/${grade}/${name}`), null);
+  showToast(`${name} 삭제됨`);
 };
 
 /* ── 전체 초기화 ── */
-window.resetAll = async function() {
+window.resetPassport = async function() {
   if (!confirm('정말 전체 참여 현황을 초기화할까요?\n이 작업은 되돌릴 수 없어요.')) return;
   await set(ref(db, 'passport'), null);
   showToast('전체 초기화 완료');
 };
 
 /* ── 토스트 ── */
+let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
 }
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;'); }
 </script>
 </body>
 </html>
