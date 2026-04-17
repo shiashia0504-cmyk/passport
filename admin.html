@@ -178,6 +178,30 @@ body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-
 }
 .reset-btn:hover { background:var(--red-lt); }
 
+/* 댓글 관리 */
+.comment-issue-section { margin-bottom:1rem; border-radius:12px; overflow:hidden; border:1.5px solid var(--border); }
+.comment-issue-header {
+  background:var(--bg2); padding:.75rem 1rem; border-bottom:1.5px solid var(--border);
+  font-size:.88rem; font-weight:700; display:flex; align-items:center; justify-content:space-between;
+}
+.comment-issue-header span { font-size:.74rem; color:var(--muted); font-weight:400; }
+.comment-mgr-item {
+  display:flex; align-items:flex-start; gap:.7rem;
+  padding:.75rem 1rem; border-bottom:1px solid var(--border); background:var(--bg2);
+}
+.comment-mgr-item:last-child { border-bottom:none; }
+.comment-mgr-meta { font-size:.7rem; color:var(--muted); margin-bottom:3px; }
+.comment-mgr-meta strong { color:var(--text); font-weight:600; }
+.comment-mgr-text { font-size:.84rem; color:var(--text); line-height:1.5; word-break:keep-all; }
+.comment-del-btn {
+  flex-shrink:0; background:none; border:1.5px solid #f5c0c0; border-radius:8px;
+  color:var(--red); font-family:'Noto Sans KR',sans-serif; font-size:.72rem;
+  padding:.3rem .6rem; cursor:pointer; transition:all .15s; margin-left:auto;
+}
+.comment-del-btn:hover { background:var(--red-lt); }
+.no-comments-msg { padding:1.2rem; text-align:center; color:var(--muted); font-size:.8rem; }
+.comment-loading { padding:1.5rem; text-align:center; color:var(--muted); font-size:.82rem; }
+
 /* 토스트 */
 .toast {
   position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(20px);
@@ -214,6 +238,7 @@ body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-
   <div class="view-tabs">
     <button class="view-tab active" onclick="switchView('passport')">✓ 참여 현황</button>
     <button class="view-tab" onclick="switchView('roster')">👤 학생 명단</button>
+    <button class="view-tab" onclick="switchView('comments')">💬 댓글 관리</button>
   </div>
 
   <!-- 참여 현황 뷰 -->
@@ -233,6 +258,11 @@ body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-
   <!-- 명단 관리 뷰 -->
   <div id="view-roster" style="display:none;">
     <div id="roster-list"></div>
+  </div>
+
+  <!-- 댓글 관리 뷰 -->
+  <div id="view-comments" style="display:none;">
+    <div id="comment-mgr"></div>
   </div>
 </div>
 
@@ -289,9 +319,12 @@ window.logout = function() {
 window.switchView = function(view) {
   document.getElementById('view-passport').style.display = view==='passport' ? 'block' : 'none';
   document.getElementById('view-roster').style.display   = view==='roster'   ? 'block' : 'none';
+  document.getElementById('view-comments').style.display = view==='comments' ? 'block' : 'none';
   document.querySelectorAll('.view-tab').forEach((t,i) => {
-    t.classList.toggle('active', (i===0&&view==='passport')||(i===1&&view==='roster'));
+    t.classList.toggle('active',
+      (i===0&&view==='passport')||(i===1&&view==='roster')||(i===2&&view==='comments'));
   });
+  if (view==='comments') renderComments();
 };
 
 /* ── 초기화 ── */
@@ -456,6 +489,79 @@ function showToast(msg) {
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ── 댓글 관리 ── */
+// ★ 특보 호수 목록 — 새 호 나올 때마다 추가
+const COMMENT_ISSUES = [
+  { no: 4, label: "제4호 · 지구의 날" },
+];
+
+let commentData = {};  // { issue_4: { key: {grade,name,text,ts} } }
+
+function renderComments() {
+  const container = document.getElementById('comment-mgr');
+  container.innerHTML = '<div class="comment-loading">불러오는 중…</div>';
+
+  // 모든 호수 댓글 한번에 구독
+  COMMENT_ISSUES.forEach(issue => {
+    const key = `issue_${issue.no}`;
+    onValue(ref(db, `comments/${key}`), snap => {
+      commentData[key] = snap.val() || {};
+      rebuildCommentView();
+    });
+  });
+}
+
+function rebuildCommentView() {
+  const container = document.getElementById('comment-mgr');
+  container.innerHTML = '';
+
+  COMMENT_ISSUES.forEach(issue => {
+    const key = `issue_${issue.no}`;
+    const data = commentData[key] || {};
+    const entries = Object.entries(data).sort((a,b) => b[1].ts - a[1].ts);
+
+    const sec = document.createElement('div');
+    sec.className = 'comment-issue-section';
+
+    const rows = entries.length === 0
+      ? `<div class="no-comments-msg">댓글이 없어요.</div>`
+      : entries.map(([ckey, c]) => `
+          <div class="comment-mgr-item">
+            <div style="flex:1;min-width:0;">
+              <div class="comment-mgr-meta">
+                <strong>${esc(c.name||'익명')}</strong> · ${esc(c.grade||'')} · ${timeAgo(c.ts)}
+              </div>
+              <div class="comment-mgr-text">${esc(c.text||'')}</div>
+            </div>
+            <button class="comment-del-btn"
+              onclick="window.deleteComment('${key}','${ckey}')">삭제</button>
+          </div>`
+        ).join('');
+
+    sec.innerHTML = `
+      <div class="comment-issue-header">
+        ${issue.label} <span>${entries.length}개</span>
+      </div>
+      ${rows}`;
+    container.appendChild(sec);
+  });
+}
+
+window.deleteComment = async function(issueKey, commentKey) {
+  if (!confirm('이 댓글을 삭제할까요?')) return;
+  await set(ref(db, `comments/${issueKey}/${commentKey}`), null);
+  showToast('댓글 삭제됨');
+};
+
+function timeAgo(ts) {
+  if (!ts) return '';
+  const s = Math.floor((Date.now()-ts)/1000);
+  if (s<60) return '방금 전';
+  if (s<3600) return `${Math.floor(s/60)}분 전`;
+  if (s<86400) return `${Math.floor(s/3600)}시간 전`;
+  return `${Math.floor(s/86400)}일 전`;
 }
 
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;'); }
