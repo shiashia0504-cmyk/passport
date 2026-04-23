@@ -134,17 +134,8 @@ main{max-width:640px;margin:0 auto;padding:0 1rem 5rem;position:relative;}
     <div class="station-marker"><div class="marker-pin pin-pink">📰</div><div class="station-num">STOP 1</div></div>
     <div class="station-content">
       <div class="station-label">첫 번째 쉼터 · 이번 특보</div>
-      <div class="card"><div class="card-body">
-        <div class="issue-badge">🌸 제4호</div>
-        <div class="issue-title">제4호 · 지구의 날 &amp; 장애인의 날 특집</div>
-        <div class="issue-sentence">
-          사랑이 눈을 떴다. 그리고 삶이 눈을 떴다.
-          <br><span style="font-size:.75rem;color:var(--pink-dk);">— 전쟁과 평화 / 톨스토이</span>
-        </div>
-        <div class="issue-viewer"><img src="4호.jpg" alt="소요도서관 특보 제4호" loading="lazy"></div>
-        <div style="text-align:right;margin-top:.6rem;">
-          <a class="open-btn" href="4호.jpg" target="_blank">↗ 크게 보기</a>
-        </div>
+      <div class="card"><div class="card-body" id="issue-body">
+        <div class="loading" style="text-align:center;padding:1.5rem 0;">특보를 불러오는 중…</div>
       </div></div>
     </div>
   </div>
@@ -239,10 +230,54 @@ const storage = getStorage(app);
 const GRADES     = ['1학년','2학년','3학년','4학년','5학년','6학년'];
 const MEDALS     = ['🥇','🥈','🥉','4위','5위','6위'];
 const BAR_COLORS = ['#e8a932','#9e9e9e','#a0714a','#52b99e','#7bab8b','#6ab4d8'];
-const CURRENT_NO = 4;
-const ALL_ISSUES = [{ no:4, label:'제4호 · 지구의 날' }];
+let CURRENT_NO = null;
 
 let missionData={}, passportData={}, rosterData={};
+
+/* ── 특보 + 댓글 탭 ── */
+onValue(ref(db,'currentIssue'), snap => {
+  const d = snap.val();
+  const body = document.getElementById('issue-body');
+  if (!d || !d.no) {
+    body.innerHTML = '<div class="loading" style="text-align:center;padding:1.5rem 0;">특보가 아직 등록되지 않았어요.</div>';
+    return;
+  }
+
+  // 특보 렌더
+  body.innerHTML = `
+    <div class="issue-badge">🌸 제${d.no}호</div>
+    <div class="issue-title">${esc(d.title||'')}</div>
+    ${d.sentence ? `<div class="issue-sentence">${esc(d.sentence)}${d.source?`<br><span style="font-size:.75rem;color:var(--pink-dk);">— ${esc(d.source)}</span>`:''}</div>` : ''}
+    ${d.img ? `<div class="issue-viewer"><img src="${esc(d.img)}" alt="소요도서관 특보 제${d.no}호" loading="lazy"></div>
+    <div style="text-align:right;margin-top:.6rem;"><a class="open-btn" href="${esc(d.img)}" target="_blank">↗ 크게 보기</a></div>` : ''}`;
+
+  // 호수가 바뀐 경우에만 탭 재생성
+  if (CURRENT_NO === d.no) return;
+  CURRENT_NO = d.no;
+
+  // 댓글 탭 동적 생성 — 현재 호 + 이전 호들 (Firebase에서 comments 키 목록 읽기)
+  onValue(ref(db,'comments'), commSnap => {
+    const commData = commSnap.val() || {};
+    const tabBar = document.getElementById('tab-bar');
+    tabBar.innerHTML = '';
+
+    // 현재 호 + 기존 댓글이 있는 이전 호들 수집
+    const existingNos = Object.keys(commData)
+      .map(k => parseInt(k.replace('issue_','')))
+      .filter(n => !isNaN(n));
+    const allNos = [...new Set([d.no, ...existingNos])].sort((a,b)=>b-a);
+
+    allNos.forEach(no => {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (no === d.no ? ' current-issue' : '');
+      btn.textContent = `제${no}호`;
+      btn.dataset.issue = no;
+      btn.onclick = () => switchTab(no);
+      tabBar.appendChild(btn);
+    });
+    switchTab(d.no);
+  }, { onlyOnce: true });
+});
 
 onValue(ref(db,'missions'),  s=>{ missionData  = s.val()||{}; renderRank(); });
 onValue(ref(db,'passport'),  s=>{ passportData = s.val()||{}; renderRank(); });
@@ -321,16 +356,7 @@ function gradeAv(grade) {
 const AV={'1학년':'av-1','2학년':'av-2','3학년':'av-3','4학년':'av-4','5학년':'av-5','6학년':'av-6','선생님':'av-3'};
 let activeTab=null, listeners={};
 
-const tabBar=document.getElementById('tab-bar');
-ALL_ISSUES.forEach(issue=>{
-  const btn=document.createElement('button');
-  btn.className='tab-btn'+(issue.no===CURRENT_NO?' current-issue':'');
-  btn.textContent=issue.label;
-  btn.dataset.issue=issue.no;
-  btn.onclick=()=>switchTab(issue.no);
-  tabBar.appendChild(btn);
-});
-switchTab(CURRENT_NO);
+// 탭은 currentIssue 구독에서 동적으로 생성
 
 function switchTab(issueNo){
   activeTab=issueNo;
@@ -427,9 +453,16 @@ window.submitComment=async function(no){
 
 function timeAgo(ts){
   if(!ts)return'';
-  const s=Math.floor((Date.now()-ts)/1000);
-  if(s<60)return'방금 전';if(s<3600)return`${Math.floor(s/60)}분 전`;
-  if(s<86400)return`${Math.floor(s/3600)}시간 전`;return`${Math.floor(s/86400)}일 전`;
+  const d=new Date(ts);
+  const now=new Date();
+  const sameYear=d.getFullYear()===now.getFullYear();
+  const diff=Math.floor((Date.now()-ts)/1000);
+  if(diff<60)return'방금 전';
+  if(diff<3600)return`${Math.floor(diff/60)}분 전`;
+  if(diff<86400)return`${Math.floor(diff/3600)}시간 전`;
+  return sameYear
+    ? `${d.getMonth()+1}월 ${d.getDate()}일`
+    : `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`;
 }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 </script>
