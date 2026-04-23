@@ -94,6 +94,14 @@ main{max-width:640px;margin:0 auto;padding:0 1rem 5rem;position:relative;}
 .submit-btn:active{transform:scale(.97);}
 .submit-btn:disabled{opacity:.5;cursor:default;}
 .comment-divider{border:none;border-top:1.5px solid var(--border);margin-bottom:.85rem;}
+.photo-attach-area{margin-top:.4rem;}
+.photo-label{display:inline-flex;align-items:center;gap:.4rem;background:var(--bg3);border:1.5px dashed var(--border);border-radius:10px;padding:.45rem .85rem;font-size:.78rem;color:var(--muted);cursor:pointer;transition:all .15s;}
+.photo-label:hover{border-color:var(--mint);color:var(--mint-dk);}
+.photo-preview-wrap{margin-top:.5rem;position:relative;display:inline-block;}
+.photo-preview-wrap img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1.5px solid var(--border);display:block;}
+.photo-remove-btn{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--pink);border:none;color:#fff;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.comment-img{margin-top:.4rem;width:100%;max-width:260px;border-radius:10px;border:1.5px solid var(--border);display:block;cursor:pointer;}
+.upload-progress{font-size:.72rem;color:var(--mint-dk);margin-top:.3rem;animation:pulse 1s ease-in-out infinite;}
 .comment-list{display:flex;flex-direction:column;gap:.75rem;}
 .comment-item{display:flex;gap:.6rem;align-items:flex-start;}
 .comment-avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;}
@@ -208,6 +216,8 @@ main{max-width:640px;margin:0 auto;padding:0 1rem 5rem;position:relative;}
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getDatabase, ref, onValue, push, query, orderByChild, limitToLast }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import { getStorage, ref as sref, uploadBytes, getDownloadURL }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOFocazj1BxRXtQgMjoyeQ9BbpkK5ceUU",
@@ -218,8 +228,9 @@ const firebaseConfig = {
   messagingSenderId: "340555302963",
   appId: "1:340555302963:web:a995d5f63e372a409dfb46"
 };
-const app = initializeApp(firebaseConfig);
-const db  = getDatabase(app);
+const app     = initializeApp(firebaseConfig);
+const db      = getDatabase(app);
+const storage = getStorage(app);
 
 const GRADES     = ['1학년','2학년','3학년','4학년','5학년','6학년'];
 const MEDALS     = ['🥇','🥈','🥉','4위','5위','6위'];
@@ -296,6 +307,13 @@ function renderRank() {
 }
 
 /* ── 댓글 ── */
+function gradeAv(grade) {
+  const colors = ['av-1','av-2','av-3','av-4','av-5','av-6'];
+  if (!grade) return 'av-1';
+  let hash = 0;
+  for (let c of grade) hash = (hash * 31 + c.charCodeAt(0)) % colors.length;
+  return colors[Math.abs(hash)];
+}
 const AV={'1학년':'av-1','2학년':'av-2','3학년':'av-3','4학년':'av-4','5학년':'av-5','6학년':'av-6','선생님':'av-3'};
 let activeTab=null, listeners={};
 
@@ -318,15 +336,16 @@ function switchTab(issueNo){
     <div class="comment-section">
       <div class="comment-form">
         <div class="form-row">
-          <select id="grade-${issueNo}">
-            <option value="">학년</option>
-            <option>1학년</option><option>2학년</option><option>3학년</option>
-            <option>4학년</option><option>5학년</option><option>6학년</option>
-            <option>선생님</option>
-          </select>
-          <input id="name-${issueNo}" type="text" placeholder="이름" maxlength="6">
+          <input id="grade-${issueNo}" type="text" placeholder="소속 (예: 3학년, 독서부)" maxlength="10" style="flex:1.2;">
+          <input id="name-${issueNo}" type="text" placeholder="이름" maxlength="8" style="flex:1;">
         </div>
         <textarea id="text-${issueNo}" placeholder="이번 산책길에서 어떤 생각이 들었나요? 🌿" maxlength="100"></textarea>
+        <div class="photo-attach-area">
+          <label class="photo-label" for="photo-${issueNo}">📷 사진 첨부 (선택)</label>
+          <input type="file" id="photo-${issueNo}" accept="image/*" style="display:none"
+            onchange="window.previewPhoto(${issueNo}, this)">
+          <div id="preview-${issueNo}"></div>
+        </div>
         <button class="submit-btn" id="btn-${issueNo}" onclick="window.submitComment(${issueNo})">남기기 ✉</button>
       </div>
       <hr class="comment-divider">
@@ -341,27 +360,65 @@ function switchTab(issueNo){
     if(!data){el.innerHTML='<div class="no-comments">아직 댓글이 없어요. 첫 번째로 남겨보세요! 🌸</div>';return;}
     el.innerHTML=Object.values(data).reverse().map(c=>`
       <div class="comment-item">
-        <div class="comment-avatar ${AV[c.grade]||'av-1'}">${esc(c.grade?.slice(0,2)||'?')}</div>
+        <div class="comment-avatar ${gradeAv(c.grade)}">${esc(c.name?.slice(0,1)||'?')}</div>
         <div class="comment-bubble">
-          <div class="comment-meta"><strong>${esc(c.name||'익명')}</strong> · ${esc(c.grade||'')} · ${timeAgo(c.ts)}</div>
-          <div class="comment-text">${esc(c.text)}</div>
+          <div class="comment-meta"><strong>${esc(c.grade||'')} ${esc(c.name||'익명')}</strong> · ${timeAgo(c.ts)}</div>
+          ${c.text ? `<div class="comment-text">${esc(c.text)}</div>` : ''}
+          ${c.imgUrl ? `<img class="comment-img" src="${c.imgUrl}" alt="첨부 이미지" loading="lazy" onclick="window.open('${c.imgUrl}','_blank')">` : ''}
         </div>
       </div>`).join('');
   });
 }
 
+// 사진 미리보기
+window.previewPhoto = function(no, input) {
+  const file = input.files[0];
+  const previewEl = document.getElementById(`preview-${no}`);
+  if (!file) { previewEl.innerHTML=''; return; }
+  const url = URL.createObjectURL(file);
+  previewEl.innerHTML = `
+    <div class="photo-preview-wrap">
+      <img src="${url}" alt="미리보기">
+      <button class="photo-remove-btn" onclick="window.removePhoto(${no})">✕</button>
+    </div>`;
+};
+window.removePhoto = function(no) {
+  document.getElementById(`photo-${no}`).value='';
+  document.getElementById(`preview-${no}`).innerHTML='';
+};
+
 window.submitComment=async function(no){
   const grade=document.getElementById(`grade-${no}`).value;
   const name=document.getElementById(`name-${no}`).value.trim();
   const text=document.getElementById(`text-${no}`).value.trim();
+  const photoInput=document.getElementById(`photo-${no}`);
+  const file = photoInput?.files?.[0];
   const btn=document.getElementById(`btn-${no}`);
-  if(!grade){alert('학년을 선택해주세요!');return;}
+
+  if(!grade){alert('소속을 입력해주세요!');return;}
   if(!name){alert('이름을 입력해주세요!');return;}
-  if(!text){alert('한마디를 입력해주세요!');return;}
-  btn.disabled=true;btn.textContent='등록 중…';
-  await push(ref(db,`comments/issue_${no}`),{grade,name,text,ts:Date.now()});
+  if(!text && !file){alert('한마디 또는 사진을 첨부해주세요!');return;}
+
+  btn.disabled=true; btn.textContent='등록 중…';
+
+  let imgUrl = null;
+  if (file) {
+    btn.textContent='사진 업로드 중…';
+    const ext = file.name.split('.').pop();
+    const path = `comments/issue_${no}/${Date.now()}.${ext}`;
+    const storageRef = sref(storage, path);
+    await uploadBytes(storageRef, file);
+    imgUrl = await getDownloadURL(storageRef);
+  }
+
+  const data = {grade, name, ts:Date.now()};
+  if (text)   data.text   = text;
+  if (imgUrl) data.imgUrl = imgUrl;
+
+  await push(ref(db,`comments/issue_${no}`), data);
   document.getElementById(`text-${no}`).value='';
-  btn.disabled=false;btn.textContent='남기기 ✉';
+  window.removePhoto(no);
+  btn.disabled=false; btn.textContent='남기기 ✉';
 };
 
 function timeAgo(ts){
