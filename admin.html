@@ -605,6 +605,25 @@ function renderComments() {
     });
   });
 }
+function buildCommentSection(label, entries, key) {
+  const head = `<div class="comment-issue-head">${label} <span>${entries.length}개</span></div>`;
+  if (entries.length === 0) return head + '<div class="empty-msg">댓글이 없어요.</div>';
+
+  const rows = entries.map(([ck, c]) => {
+    const meta = `<div class="comment-mgr-meta"><strong>${esc((c.grade||'')+' '+(c.name||'익명'))}</strong> · ${timeAgo(c.ts)}</div>`;
+    const text = c.text ? `<div class="comment-mgr-text">${esc(c.text)}</div>` : '';
+    const img  = c.imgUrl
+      ? `<img src="${c.imgUrl}" alt="첨부 이미지" loading="lazy"
+           style="margin-top:.4rem;width:100%;max-width:200px;border-radius:8px;border:1.5px solid var(--border);display:block;cursor:pointer;"
+           onclick="window.open(this.src,'_blank')">`
+      : '';
+    const delBtn = `<button class="comment-del-btn" onclick="window.deleteComment('${key}','${ck}')">삭제</button>`;
+    return `<div class="comment-mgr-item"><div style="flex:1;min-width:0;">${meta}${text}${img}</div>${delBtn}</div>`;
+  }).join('');
+
+  return head + rows;
+}
+
 window.deleteComment = async function(issueKey, ck) {
   if (!confirm('이 댓글을 삭제할까요?')) return;
   await set(ref(db,`comments/${issueKey}/${ck}`), null);
