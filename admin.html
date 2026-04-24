@@ -580,45 +580,56 @@ window.deleteStudent = async function(grade, key, name) {
 };
 
 /* ── 댓글 관리 ── */
-const COMMENT_ISSUES = [{ no:4, label:'제4호 · 지구의 날' }];
 function renderComments() {
   const container = document.getElementById('comment-mgr');
-  container.innerHTML = '';
-  COMMENT_ISSUES.forEach(issue => {
-    const key = `issue_${issue.no}`;
-    onValue(ref(db,`comments/${key}`), snap => {
-      const data    = snap.val()||{};
-      const entries = Object.entries(data).sort((a,b)=>b[1].ts-a[1].ts);
-      let sec = document.getElementById(`csec-${key}`);
-      if (!sec) { sec=document.createElement('div'); sec.id=`csec-${key}`; sec.className='comment-issue-sec'; container.appendChild(sec); }
-      sec.innerHTML = `
-        <div class="comment-issue-head">${issue.label} <span>${entries.length}개</span></div>
-        ${entries.length===0 ? '<div class="empty-msg">댓글이 없어요.</div>'
-          : entries.map(([ck,c])=>`
-            <div class="comment-mgr-item">
-              <div style="flex:1;min-width:0;">
-                <div class="comment-mgr-meta"><strong>${esc(c.name||'익명')}</strong> · ${esc(c.grade||'')} · ${timeAgo(c.ts)}</div>
-                <div class="comment-mgr-text">${esc(c.text||'')}</div>
-              </div>
-              <button class="comment-del-btn" onclick="window.deleteComment('${key}','${ck}')">삭제</button>
-            </div>`).join('')}`;
+  container.innerHTML = '<div class="empty-msg">불러오는 중…</div>';
+
+  // Firebase에서 모든 호수 댓글 동적으로 불러오기
+  onValue(ref(db,'comments'), snap => {
+    const allData = snap.val() || {};
+    container.innerHTML = '';
+
+    const keys = Object.keys(allData).sort((a,b) => {
+      const na = parseInt(a.replace('issue_','')); 
+      const nb = parseInt(b.replace('issue_',''));
+      return nb - na;
     });
-  });
+
+    if (keys.length === 0) {
+      container.innerHTML = '<div class="empty-msg">댓글이 없어요.</div>';
+      return;
+    }
+
+    keys.forEach(key => {
+      const no = key.replace('issue_','');
+      const entries = Object.entries(allData[key]||{}).sort((a,b)=>b[1].ts-a[1].ts);
+      const sec = document.createElement('div');
+      sec.className = 'comment-issue-sec';
+      sec.innerHTML = buildCommentSection('제'+no+'호', entries, key);
+      container.appendChild(sec);
+    });
+  }, { onlyOnce: true });
 }
+
 function buildCommentSection(label, entries, key) {
-  const head = `<div class="comment-issue-head">${label} <span>${entries.length}개</span></div>`;
+  const head = '<div class="comment-issue-head">' + label + ' <span>' + entries.length + '개</span></div>';
   if (entries.length === 0) return head + '<div class="empty-msg">댓글이 없어요.</div>';
 
-  const rows = entries.map(([ck, c]) => {
-    const meta = `<div class="comment-mgr-meta"><strong>${esc((c.grade||'')+' '+(c.name||'익명'))}</strong> · ${timeAgo(c.ts)}</div>`;
-    const text = c.text ? `<div class="comment-mgr-text">${esc(c.text)}</div>` : '';
-    const img  = c.imgUrl
-      ? `<img src="${c.imgUrl}" alt="첨부 이미지" loading="lazy"
-           style="margin-top:.4rem;width:100%;max-width:200px;border-radius:8px;border:1.5px solid var(--border);display:block;cursor:pointer;"
-           onclick="window.open(this.src,'_blank')">`
-      : '';
-    const delBtn = `<button class="comment-del-btn" onclick="window.deleteComment('${key}','${ck}')">삭제</button>`;
-    return `<div class="comment-mgr-item"><div style="flex:1;min-width:0;">${meta}${text}${img}</div>${delBtn}</div>`;
+  const rows = entries.map(function([ck, c]) {
+    const nick = esc((c.grade||'') + ' ' + (c.name||'익명')).trim();
+    let html = '<div class="comment-mgr-item">';
+    html += '<div style="flex:1;min-width:0;">';
+    html += '<div class="comment-mgr-meta"><strong>' + nick + '</strong> · ' + timeAgo(c.ts) + '</div>';
+    if (c.text) html += '<div class="comment-mgr-text">' + esc(c.text) + '</div>';
+    if (c.imgUrl) {
+      html += '<img src="' + c.imgUrl + '" alt="첨부 이미지" loading="lazy" ';
+      html += 'style="margin-top:.4rem;width:100%;max-width:200px;border-radius:8px;border:1.5px solid var(--border);display:block;cursor:pointer;" ';
+      html += 'onclick="window.open(this.src,'_blank')">';
+    }
+    html += '</div>';
+    html += '<button class="comment-del-btn" onclick="window.deleteComment('' + key + '','' + ck + '')">삭제</button>';
+    html += '</div>';
+    return html;
   }).join('');
 
   return head + rows;
