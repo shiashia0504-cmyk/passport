@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>소요도서관 · 건강여권 관리</title>
+<title>소요도서관 · 관리자</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -17,7 +17,6 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:15px;min-height:100vh;}
 
-/* 로그인 */
 #login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
 .login-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:18px;padding:2rem 1.8rem;width:100%;max-width:320px;box-shadow:0 4px 20px rgba(82,185,158,.1);text-align:center;}
 .login-icon{font-size:2rem;margin-bottom:.8rem;}
@@ -31,7 +30,6 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
 .back-link{margin-top:1.2rem;font-size:.74rem;color:var(--muted);display:inline-block;}
 .back-link:hover{color:var(--mint-dk);}
 
-/* 관리자 */
 #admin-screen{display:none;max-width:720px;margin:0 auto;padding:1.2rem 1rem 5rem;}
 .admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;padding-bottom:1rem;border-bottom:1.5px solid var(--border);}
 .admin-title{font-size:1rem;font-weight:700;}
@@ -39,70 +37,73 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
 .logout-btn{background:none;border:1.5px solid var(--border);border-radius:20px;color:var(--muted);font-family:'Noto Sans KR',sans-serif;font-size:.74rem;padding:.32rem .8rem;cursor:pointer;}
 .logout-btn:hover{border-color:var(--pink);color:var(--pink-dk);}
 
-/* 탭 */
 .view-tabs{display:flex;border-bottom:1.5px solid var(--border);margin-bottom:1.2rem;overflow-x:auto;scrollbar-width:none;}
 .view-tabs::-webkit-scrollbar{display:none;}
-.view-tab{flex-shrink:0;background:none;border:none;border-bottom:2.5px solid transparent;color:var(--muted);font-family:'Noto Sans KR',sans-serif;font-size:.75rem;font-weight:500;padding:.7rem .9rem .6rem;cursor:pointer;transition:all .15s;white-space:nowrap;margin-bottom:-1.5px;}
+.view-tab{flex-shrink:0;background:none;border:none;border-bottom:2.5px solid transparent;color:var(--muted);font-family:'Noto Sans KR',sans-serif;font-size:.75rem;font-weight:500;padding:.7rem .9rem .6rem;cursor:pointer;white-space:nowrap;margin-bottom:-1.5px;transition:all .15s;}
 .view-tab.active{color:var(--mint-dk);border-bottom-color:var(--mint);}
 
-/* 요약 */
 .summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;margin-bottom:1.2rem;}
 .summary-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:.8rem;text-align:center;}
 .summary-num{font-size:1.3rem;font-weight:700;color:var(--mint-dk);}
 .summary-label{font-size:.66rem;color:var(--muted);margin-top:.2rem;}
 
-/* 학년 섹션 */
 .grade-section{margin-bottom:1rem;border-radius:12px;overflow:hidden;border:1.5px solid var(--border);}
 .grade-header{display:flex;align-items:center;gap:.7rem;background:var(--bg2);padding:.75rem 1rem;border-bottom:1.5px solid var(--border);cursor:pointer;user-select:none;}
 .grade-header:hover{background:var(--bg3);}
 .grade-title{font-size:.9rem;font-weight:700;}
-.grade-avg{font-size:.74rem;color:var(--muted);margin-left:.3rem;}
+.grade-avg{font-size:.74rem;color:var(--muted);}
 .grade-bar-wrap{flex:1;}
 .grade-bar-bg{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
 .grade-bar-fill{height:100%;border-radius:3px;transition:width .5s;}
 .grade-toggle{font-size:.75rem;color:var(--muted);margin-left:auto;}
 
-/* 학생 테이블 */
-.student-table{width:100%;background:var(--bg2);}
 .student-table-head{display:grid;padding:.5rem 1rem;border-bottom:1.5px solid var(--border);background:var(--bg3);}
 .student-table-row{display:grid;padding:.55rem 1rem;border-bottom:1px solid var(--border);align-items:center;}
 .student-table-row:last-child{border-bottom:none;}
 .student-name-cell{font-size:.82rem;font-weight:500;}
-.col-label{font-size:.65rem;color:var(--muted);font-weight:600;letter-spacing:.05em;text-align:center;}
-
-/* 미션 셀 */
+.col-label{font-size:.65rem;color:var(--muted);font-weight:600;text-align:center;}
 .mission-cell{display:flex;flex-direction:column;align-items:center;gap:3px;}
-/* 완료형 */
 .check-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;}
 .check-btn.done{background:var(--mint-lt);border-color:var(--mint);color:var(--mint-dk);}
-/* 횟수형 */
 .count-ctrl{display:flex;align-items:center;gap:3px;}
-.count-btn{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg3);cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.count-btn{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg3);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .count-btn:hover{background:var(--mint-lt);border-color:var(--mint);}
 .count-num{font-size:.8rem;font-weight:700;min-width:20px;text-align:center;color:var(--mint-dk);}
 .count-num.zero{color:var(--muted);font-weight:400;}
+.action-bar{display:flex;gap:.5rem;padding:.7rem 1rem;background:var(--bg3);flex-wrap:wrap;}
+.act-btn{font-size:.7rem;font-weight:600;padding:.3rem .75rem;border-radius:8px;cursor:pointer;border:none;font-family:'Noto Sans KR',sans-serif;}
+.act-btn-mint{background:var(--mint);color:#fff;}
+.act-btn-mint:hover{background:var(--mint-dk);}
+.act-btn-red{background:var(--red-lt);border:1.5px solid #f5c0c0;color:var(--red);}
+.act-btn-red:hover{background:#fdd0d0;}
 
-/* 미션 설정 */
-.mission-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:.85rem;}
-.mission-card-head{padding:.75rem 1rem;border-bottom:1.5px solid var(--border);font-size:.85rem;font-weight:700;}
-.mission-card-body{padding:.85rem 1rem;}
+.field-group{margin-bottom:.75rem;}
+.field-label{font-size:.72rem;color:var(--muted);margin-bottom:.3rem;}
+.field-input{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.9rem;padding:.5rem .7rem;outline:none;transition:border-color .15s;}
+.field-input:focus{border-color:var(--mint);}
+.field-textarea{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.88rem;padding:.5rem .7rem;outline:none;resize:none;height:70px;line-height:1.5;transition:border-color .15s;}
+.field-textarea:focus{border-color:var(--mint);}
+.field-note{font-size:.68rem;color:var(--muted);margin-top:.35rem;}
+
+.section-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:.85rem;}
+.section-card-head{padding:.75rem 1rem;border-bottom:1.5px solid var(--border);font-size:.88rem;font-weight:700;}
+.section-card-body{padding:.85rem 1rem;}
+
 .mission-row{display:flex;align-items:center;gap:.6rem;padding:.45rem 0;border-bottom:1px solid var(--border);}
 .mission-row:last-child{border-bottom:none;}
 .mission-row-name{flex:1;font-size:.84rem;font-weight:500;}
-.mission-row-type{display:flex;gap:.3rem;}
 .type-btn{font-size:.65rem;font-weight:600;padding:.28rem .65rem;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);background:var(--bg3);color:var(--muted);transition:all .15s;}
 .type-btn.active-check{background:var(--mint-lt);border-color:var(--mint);color:var(--mint-dk);}
 .type-btn.active-count{background:var(--gold-lt);border-color:#f0d080;color:var(--gold);}
 .mission-del-btn{background:none;border:none;color:#ccc;cursor:pointer;font-size:.8rem;padding:.2rem .35rem;border-radius:5px;}
 .mission-del-btn:hover{background:var(--red-lt);color:var(--red);}
 .mission-fixed-tag{font-size:.62rem;color:var(--muted);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:2px 7px;}
-.add-mission-row{display:flex;gap:.45rem;margin-top:.85rem;}
-.add-mission-row input{flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.82rem;padding:.42rem .65rem;outline:none;transition:border-color .15s;}
-.add-mission-row input:focus{border-color:var(--mint);}
+.add-row{display:flex;gap:.45rem;margin-top:.85rem;}
+.add-row input{flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.82rem;padding:.42rem .65rem;outline:none;}
+.add-row input:focus{border-color:var(--mint);}
 .add-btn{background:var(--mint);border:none;border-radius:8px;color:#fff;font-family:'Noto Sans KR',sans-serif;font-size:.78rem;font-weight:600;padding:.42rem .85rem;cursor:pointer;white-space:nowrap;}
 .add-btn:hover{background:var(--mint-dk);}
 
-/* 학생 명단 */
 .roster-section{margin-bottom:1rem;border-radius:12px;overflow:hidden;border:1.5px solid var(--border);}
 .roster-header{background:var(--bg2);padding:.75rem 1rem;border-bottom:1.5px solid var(--border);font-size:.88rem;font-weight:700;display:flex;align-items:center;justify-content:space-between;}
 .roster-header span{font-size:.74rem;color:var(--muted);font-weight:400;}
@@ -111,11 +112,10 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
 .name-text{flex:1;font-size:.84rem;}
 .del-btn{background:none;border:none;color:#ccc;font-size:.8rem;cursor:pointer;padding:.2rem .4rem;border-radius:5px;}
 .del-btn:hover{background:var(--red-lt);color:var(--red);}
-.add-row{display:flex;gap:.45rem;padding:.65rem .85rem;border-top:1.5px solid var(--border);background:var(--bg3);}
-.add-row input{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.82rem;padding:.42rem .65rem;outline:none;}
-.add-row input:focus{border-color:var(--mint);}
+.name-add-row{display:flex;gap:.45rem;padding:.65rem .85rem;border-top:1.5px solid var(--border);background:var(--bg3);}
+.name-add-row input{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.82rem;padding:.42rem .65rem;outline:none;}
+.name-add-row input:focus{border-color:var(--mint);}
 
-/* 댓글 */
 .comment-issue-sec{margin-bottom:1rem;border-radius:12px;overflow:hidden;border:1.5px solid var(--border);}
 .comment-issue-head{background:var(--bg2);padding:.75rem 1rem;border-bottom:1.5px solid var(--border);font-size:.88rem;font-weight:700;display:flex;align-items:center;justify-content:space-between;}
 .comment-issue-head span{font-size:.74rem;color:var(--muted);font-weight:400;}
@@ -124,22 +124,27 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
 .comment-mgr-meta{font-size:.7rem;color:var(--muted);margin-bottom:3px;}
 .comment-mgr-meta strong{color:var(--text);font-weight:600;}
 .comment-mgr-text{font-size:.84rem;line-height:1.5;word-break:keep-all;}
+.comment-mgr-img{margin-top:.4rem;width:100%;max-width:200px;border-radius:8px;border:1.5px solid var(--border);display:block;cursor:pointer;}
 .comment-del-btn{flex-shrink:0;background:none;border:1.5px solid #f5c0c0;border-radius:8px;color:var(--red);font-family:'Noto Sans KR',sans-serif;font-size:.72rem;padding:.3rem .6rem;cursor:pointer;margin-left:auto;}
 .comment-del-btn:hover{background:var(--red-lt);}
 
-.empty-msg{padding:1.2rem;text-align:center;color:var(--muted);font-size:.8rem;}
+.issue-preview-box{background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:.75rem;margin-top:.5rem;font-size:.82rem;line-height:1.7;}
+
+.save-btn{width:100%;background:var(--mint);border:none;border-radius:20px;color:#fff;font-family:'Noto Sans KR',sans-serif;font-size:.88rem;font-weight:700;padding:.6rem;cursor:pointer;box-shadow:0 2px 8px rgba(82,185,158,.3);margin-top:.5rem;}
+.save-btn:hover{background:var(--mint-dk);}
+
 .danger-zone{margin-top:2rem;padding-top:1.2rem;border-top:1.5px dashed #f0d0d0;}
 .danger-label{font-size:.68rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;}
 .reset-btn{background:none;border:1.5px solid #f5c0c0;border-radius:20px;color:var(--red);font-family:'Noto Sans KR',sans-serif;font-size:.8rem;padding:.42rem 1rem;cursor:pointer;}
 .reset-btn:hover{background:var(--red-lt);}
 
+.empty-msg{padding:1.2rem;text-align:center;color:var(--muted);font-size:.8rem;background:var(--bg2);}
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#2d3a2e;color:#fff;font-size:.82rem;padding:.6rem 1.2rem;border-radius:20px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:999;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 
-<!-- 로그인 -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-icon">🌿</div>
@@ -152,21 +157,19 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
   </div>
 </div>
 
-<!-- 관리자 화면 -->
 <div id="admin-screen">
   <div class="admin-header">
     <div class="admin-title">🌿 건강여권 <em>관리자</em></div>
     <button class="logout-btn" onclick="logout()">로그아웃</button>
   </div>
   <div class="view-tabs">
-    <button class="view-tab active"  onclick="switchView('passport')">✓ 참여 현황</button>
-    <button class="view-tab"         onclick="switchView('missions')">🎯 미션 설정</button>
-    <button class="view-tab"         onclick="switchView('roster')">👤 학생 명단</button>
-    <button class="view-tab"         onclick="switchView('comments')">💬 댓글 관리</button>
-    <button class="view-tab"         onclick="switchView('issue')">📰 특보 관리</button>
+    <button class="view-tab active" onclick="switchView('passport')">✓ 참여 현황</button>
+    <button class="view-tab" onclick="switchView('missions')">🎯 미션 설정</button>
+    <button class="view-tab" onclick="switchView('roster')">👤 학생 명단</button>
+    <button class="view-tab" onclick="switchView('comments')">💬 댓글 관리</button>
+    <button class="view-tab" onclick="switchView('issue')">📰 특보 관리</button>
   </div>
 
-  <!-- 참여 현황 -->
   <div id="view-passport">
     <div class="summary-row">
       <div class="summary-card"><div class="summary-num" id="s-students">—</div><div class="summary-label">전체 학생</div></div>
@@ -180,13 +183,12 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
     </div>
   </div>
 
-  <!-- 미션 설정 -->
   <div id="view-missions" style="display:none;">
-    <div class="mission-card">
-      <div class="mission-card-head">미션 목록 &amp; 유형 설정</div>
-      <div class="mission-card-body">
+    <div class="section-card">
+      <div class="section-card-head">미션 목록 &amp; 유형 설정</div>
+      <div class="section-card-body">
         <div id="mission-list-admin"></div>
-        <div class="add-mission-row">
+        <div class="add-row">
           <input type="text" id="mission-input" placeholder="새 미션 이름 (예: 걷기)" maxlength="10"
             onkeydown="if(event.key==='Enter')addMission()">
           <button class="add-btn" onclick="addMission()">+ 추가</button>
@@ -198,64 +200,46 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
     </div>
   </div>
 
-  <!-- 학생 명단 -->
   <div id="view-roster" style="display:none;">
     <div id="roster-list"></div>
   </div>
 
-  <!-- 댓글 관리 -->
   <div id="view-comments" style="display:none;">
-    <div id="comment-mgr"></div>
+    <div id="comment-mgr"><div class="empty-msg">탭을 열면 불러와요.</div></div>
   </div>
 
-  <!-- 특보 관리 -->
   <div id="view-issue" style="display:none;">
-    <div class="mission-card">
-      <div class="mission-card-head">현재 특보 설정</div>
-      <div class="mission-card-body" style="display:flex;flex-direction:column;gap:.75rem;">
-
-        <div>
-          <div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">호수</div>
-          <input type="number" id="issue-no" placeholder="예: 5" min="1" style="width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.9rem;padding:.5rem .7rem;outline:none;">
+    <div class="section-card">
+      <div class="section-card-head">현재 특보 설정</div>
+      <div class="section-card-body">
+        <div class="field-group">
+          <div class="field-label">호수</div>
+          <input type="number" id="issue-no" class="field-input" placeholder="예: 5" min="1">
         </div>
-
-        <div>
-          <div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">제목</div>
-          <input type="text" id="issue-title" placeholder="예: 제5호 · 어린이날 특집" maxlength="40"
-            style="width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.9rem;padding:.5rem .7rem;outline:none;">
+        <div class="field-group">
+          <div class="field-label">제목</div>
+          <input type="text" id="issue-title" class="field-input" placeholder="예: 제5호 · 어린이날 특집" maxlength="40">
         </div>
-
-        <div>
-          <div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">이번 호 문장</div>
-          <textarea id="issue-sentence" placeholder="이번 특보의 대표 문장을 입력하세요" maxlength="100"
-            style="width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.88rem;padding:.5rem .7rem;outline:none;resize:none;height:70px;line-height:1.5;"></textarea>
+        <div class="field-group">
+          <div class="field-label">이번 호 문장</div>
+          <textarea id="issue-sentence" class="field-textarea" placeholder="이번 특보의 대표 문장" maxlength="100"></textarea>
         </div>
-
-        <div>
-          <div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">문장 출처</div>
-          <input type="text" id="issue-source" placeholder="예: 전쟁과 평화 / 톨스토이" maxlength="40"
-            style="width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.9rem;padding:.5rem .7rem;outline:none;">
+        <div class="field-group">
+          <div class="field-label">문장 출처</div>
+          <input type="text" id="issue-source" class="field-input" placeholder="예: 전쟁과 평화 / 톨스토이" maxlength="40">
         </div>
-
-        <div>
-          <div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">날짜</div>
-          <input type="text" id="issue-date" placeholder="예: 2026.05.05"
-            style="width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.9rem;padding:.5rem .7rem;outline:none;">
+        <div class="field-group">
+          <div class="field-label">날짜</div>
+          <input type="text" id="issue-date" class="field-input" placeholder="예: 2026.05.05">
         </div>
-
-        <div>
-          <div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">특보 이미지 파일명 (GitHub에 올린 파일명)</div>
-          <input type="text" id="issue-img" placeholder="예: 5호.jpg"
-            style="width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:.9rem;padding:.5rem .7rem;outline:none;">
-          <div style="font-size:.68rem;color:var(--muted);margin-top:.35rem;">※ index.html과 같은 폴더에 있는 이미지 파일명만 입력하면 돼요.</div>
+        <div class="field-group">
+          <div class="field-label">이미지 파일명 (GitHub에 올린 파일명)</div>
+          <input type="text" id="issue-img" class="field-input" placeholder="예: 5호.jpg">
+          <div class="field-note">※ index.html과 같은 폴더에 있는 이미지 파일명만 입력하면 돼요.</div>
         </div>
-
-        <button onclick="saveIssue()" style="background:var(--mint);border:none;border-radius:20px;color:#fff;font-family:'Noto Sans KR',sans-serif;font-size:.88rem;font-weight:700;padding:.6rem;cursor:pointer;box-shadow:0 2px 8px rgba(82,185,158,.3);">저장하기</button>
-
-        <div style="background:var(--bg3);border:1.5px solid var(--border);border-radius:10px;padding:.75rem;margin-top:.3rem;">
-          <div style="font-size:.72rem;color:var(--muted);margin-bottom:.4rem;">현재 저장된 특보</div>
-          <div id="issue-preview" style="font-size:.82rem;color:var(--text);line-height:1.7;">불러오는 중…</div>
-        </div>
+        <button class="save-btn" onclick="saveIssue()">저장하기</button>
+        <div class="field-label" style="margin-top:1rem;">현재 저장된 특보</div>
+        <div class="issue-preview-box" id="issue-preview">불러오는 중…</div>
       </div>
     </div>
   </div>
@@ -265,8 +249,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, onValue, set, push }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import { getDatabase, ref, onValue, set, push } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOFocazj1BxRXtQgMjoyeQ9BbpkK5ceUU",
@@ -277,25 +260,23 @@ const firebaseConfig = {
   messagingSenderId: "340555302963",
   appId: "1:340555302963:web:a995d5f63e372a409dfb46"
 };
+
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-const ADMIN_PW = "0000";
-const GRADES   = ['1학년','2학년','3학년','4학년','5학년','6학년'];
+const ADMIN_PW       = "0000";
+const GRADES         = ['1학년','2학년','3학년','4학년','5학년','6학년'];
 const FIXED_MISSIONS = ['프로타주','유연성','균형'];
-
-// Firebase 구조:
-// missions/ { 프로타주:{type:'check'}, 유연성:{type:'count'}, 걷기:{type:'count'} }
-// passport/ { 1학년:{ 홍길동:{ 프로타주:true, 유연성:12, 걷기:8 } } }
-// roster/   { 1학년:{ '-key':'홍길동' } }
+const BAR_COLORS     = ['#e8a932','#9e9e9e','#a0714a','#52b99e','#7bab8b','#6ab4d8'];
+const MEDALS         = ['🥇','🥈','🥉','','',''];
 
 let missionData  = {};
 let passportData = {};
 let rosterData   = {};
 let expandedGrade = null;
 
-/* ── 로그인 ── */
-window.tryLogin = function() {
+/* ── 로그인/로그아웃 ── */
+function tryLogin() {
   const pw = document.getElementById('pw-input').value;
   if (pw === ADMIN_PW) {
     document.getElementById('login-screen').style.display = 'none';
@@ -306,403 +287,408 @@ window.tryLogin = function() {
     document.getElementById('pw-input').value = '';
     document.getElementById('pw-input').focus();
   }
-};
-window.logout = function() {
+}
+function logout() {
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('admin-screen').style.display = 'none';
   document.getElementById('pw-input').value = '';
-};
+}
+window.tryLogin = tryLogin;
+window.logout   = logout;
 
 /* ── 탭 ── */
-window.switchView = function(view) {
-  ['passport','missions','roster','comments','issue'].forEach(v =>
-    document.getElementById(`view-${v}`).style.display = v===view?'block':'none');
-  document.querySelectorAll('.view-tab').forEach((t,i) =>
-    t.classList.toggle('active',['passport','missions','roster','comments','issue'][i]===view));
-  if (view==='comments') renderComments();
-};
-
-/* ── Firebase 구독 ── */
-function initAdmin() {
-  onValue(ref(db,'missions'), snap => {
-    missionData = snap.val() || {};
-    // 미션이 없으면 기본값 세팅
-    if (!Object.keys(missionData).length) {
-      const defaults = { 프로타주:{type:'check'}, 유연성:{type:'count'}, 균형:{type:'count'} };
-      set(ref(db,'missions'), defaults);
-    }
-    renderPassport(); renderMissionsAdmin();
+function switchView(view) {
+  var views = ['passport','missions','roster','comments','issue'];
+  views.forEach(function(v) {
+    document.getElementById('view-' + v).style.display = v === view ? 'block' : 'none';
   });
-  onValue(ref(db,'passport'), snap => { passportData = snap.val()||{}; renderPassport(); });
-  onValue(ref(db,'roster'),   snap => { rosterData   = snap.val()||{}; renderPassport(); renderRoster(); });
+  document.querySelectorAll('.view-tab').forEach(function(t, i) {
+    t.classList.toggle('active', views[i] === view);
+  });
+  if (view === 'comments') renderComments();
+}
+window.switchView = switchView;
+
+/* ── 초기화 ── */
+function initAdmin() {
+  onValue(ref(db, 'missions'), function(snap) {
+    missionData = snap.val() || {};
+    if (!Object.keys(missionData).length) {
+      var defaults = { '프로타주': {type:'check'}, '유연성': {type:'count'}, '균형': {type:'count'} };
+      set(ref(db, 'missions'), defaults);
+    }
+    renderPassport();
+    renderMissionsAdmin();
+  });
+  onValue(ref(db, 'passport'), function(snap) { passportData = snap.val() || {}; renderPassport(); });
+  onValue(ref(db, 'roster'),   function(snap) { rosterData   = snap.val() || {}; renderPassport(); renderRoster(); });
+  onValue(ref(db, 'currentIssue'), function(snap) { renderIssuePreview(snap.val()); });
 }
 
 /* ── 헬퍼 ── */
-function getMissions()       { return Object.entries(missionData).filter(([,v])=>v); }
-function getStudents(grade)  { return Object.entries(rosterData[grade]||{}); } // [[key,name]]
-function getVal(grade,name,m){ return passportData[grade]?.[name]?.[m] ?? (missionData[m]?.type==='count'?0:false); }
-
-// 학생 점수: 횟수형은 합산, 완료형은 1로 카운트
-function studentScore(grade, name) {
-  return getMissions().reduce((sum,[m,info]) => {
-    const v = getVal(grade,name,m);
-    return sum + (info.type==='count' ? (v||0) : (v?1:0));
-  }, 0);
-}
-// 학년 평균: 횟수형 미션들만 평균
+function getMissions()        { return Object.entries(missionData).filter(function(e){ return e[1]; }); }
+function getStudents(grade)   { return Object.entries(rosterData[grade] || {}); }
+function getVal(grade, name, m) { return passportData[grade] && passportData[grade][name] ? passportData[grade][name][m] : null; }
 function gradeAvg(grade) {
-  const students = getStudents(grade);
+  var students = getStudents(grade);
   if (!students.length) return 0;
-  const countMissions = getMissions().filter(([,v])=>v.type==='count');
-  if (!countMissions.length) return 0;
-  const total = students.reduce((sum,[,name]) => {
-    return sum + countMissions.reduce((s,[m]) => s + (getVal(grade,name,m)||0), 0);
+  var cms = getMissions().filter(function(e){ return e[1].type === 'count'; });
+  if (!cms.length) return 0;
+  var total = students.reduce(function(sum, pair) {
+    return sum + cms.reduce(function(s, m) { return s + (parseInt(getVal(grade, pair[1], m[0])) || 0); }, 0);
   }, 0);
-  return (total / students.length).toFixed(1);
+  return parseFloat((total / students.length).toFixed(1));
 }
 
 /* ── 참여 현황 ── */
 function renderPassport() {
-  const missions = getMissions();
-  const countMissions = missions.filter(([,v])=>v.type==='count');
-  let totalStudents = 0;
-  GRADES.forEach(g => { totalStudents += getStudents(g).length; });
+  var missions = getMissions();
+  var cms = missions.filter(function(e){ return e[1].type === 'count'; });
+  var totalStudents = 0;
+  GRADES.forEach(function(g) { totalStudents += getStudents(g).length; });
 
-  const allAvgs = GRADES.map(g => parseFloat(gradeAvg(g)));
-  const overallAvg = allAvgs.length ? (allAvgs.reduce((a,b)=>a+b,0)/allAvgs.filter(v=>v>0||true).length).toFixed(1) : 0;
+  var ranked = GRADES.map(function(g) {
+    return { grade: g, avg: gradeAvg(g), count: getStudents(g).length };
+  }).sort(function(a, b) { return b.avg - a.avg; });
+
+  var maxAvg = Math.max.apply(null, ranked.map(function(r){ return r.avg; }).concat([0.1]));
+  var totalSum = 0;
+  GRADES.forEach(function(g) {
+    getStudents(g).forEach(function(pair) {
+      cms.forEach(function(m) { totalSum += parseInt(getVal(g, pair[1], m[0])) || 0; });
+    });
+  });
+  var overallAvg = totalStudents ? (totalSum / totalStudents).toFixed(1) : 0;
 
   document.getElementById('s-students').textContent = totalStudents;
   document.getElementById('s-missions').textContent = missions.length;
-  document.getElementById('s-avg').textContent = overallAvg;
+  document.getElementById('s-avg').textContent      = overallAvg;
 
-  // 학년 정렬 (횟수형 평균 기준)
-  const ranked = GRADES.map(g => ({grade:g, avg:parseFloat(gradeAvg(g)), count:getStudents(g).length}))
-    .sort((a,b) => b.avg - a.avg);
-
-  const maxAvg = Math.max(...ranked.map(r=>r.avg), 1);
-  const BAR_COLORS = ['#e8a932','#9e9e9e','#a0714a','#52b99e','#7bab8b','#6ab4d8'];
-  const MEDALS = ['🥇','🥈','🥉','','',''];
-
-  const container = document.getElementById('grade-list');
+  var container = document.getElementById('grade-list');
   container.innerHTML = '';
 
-  ranked.forEach(({grade, avg, count}, idx) => {
-    const students = getStudents(grade);
-    const isExpanded = expandedGrade === grade;
-    const pct = maxAvg > 0 ? Math.round(avg/maxAvg*100) : 0;
+  ranked.forEach(function(item, idx) {
+    var grade    = item.grade;
+    var avg      = item.avg;
+    var students = getStudents(grade);
+    var pct      = maxAvg > 0 ? Math.round(avg / maxAvg * 100) : 0;
+    var isExp    = expandedGrade === grade;
+    var color    = BAR_COLORS[idx];
+    var medal    = MEDALS[idx] || '';
 
-    // 학생 행 헤더
-    const colTemplate = `80px repeat(${missions.length}, 1fr)`;
-    const headCols = `<span class="col-label" style="text-align:left;">이름</span>`
-      + missions.map(([m,info]) =>
-          `<span class="col-label">${m}<br><span style="color:${info.type==='count'?'var(--gold)':'var(--mint-dk)'};">${info.type==='count'?'#':'✓'}</span></span>`
-        ).join('');
-
-    const studentRows = students.length === 0
-      ? `<div class="empty-msg">명단에 학생이 없어요.</div>`
-      : students.map(([,name]) => {
-          const cells = missions.map(([m,info]) => {
-            const val = getVal(grade,name,m);
-            if (info.type === 'check') {
-              return `<div class="mission-cell">
-                <div class="check-btn ${val?'done':''}" onclick="window.toggleCheck('${grade}','${name}','${m}')">${val?'✓':''}</div>
-              </div>`;
-            } else {
-              return `<div class="mission-cell">
-                <div class="count-ctrl">
-                  <button class="count-btn" onclick="window.changeCount('${grade}','${name}','${m}',-1)">−</button>
-                  <span class="count-num ${!val?'zero':''}">${val||0}</span>
-                  <button class="count-btn" onclick="window.changeCount('${grade}','${name}','${m}',1)">+</button>
-                </div>
-              </div>`;
-            }
-          }).join('');
-          return `<div class="student-table-row" style="grid-template-columns:${colTemplate};">
-            <div class="student-name-cell">${esc(name)}</div>${cells}
-          </div>`;
-        }).join('');
-
-    const sec = document.createElement('div');
+    var sec = document.createElement('div');
     sec.className = 'grade-section';
-    sec.innerHTML = `
-      <div class="grade-header" onclick="window.toggleGrade('${grade}')">
-        <span style="font-size:1rem;min-width:22px;">${MEDALS[idx]||''}</span>
-        <span class="grade-title">${grade}</span>
-        <span class="grade-avg">평균 ${avg}일</span>
-        <div class="grade-bar-wrap">
-          <div class="grade-bar-bg">
-            <div class="grade-bar-fill" style="width:${pct}%;background:${BAR_COLORS[idx]};"></div>
-          </div>
-        </div>
-        <span class="grade-toggle">${isExpanded?'▲':'▼'}</span>
-      </div>
-      ${isExpanded ? `
-        <div class="student-table-head" style="grid-template-columns:${colTemplate};">${headCols}</div>
-        ${studentRows}
-        ${students.length>0 ? `
-          <div style="display:flex;gap:.5rem;padding:.7rem 1rem;background:var(--bg3);flex-wrap:wrap;">
-            <button class="add-btn" style="font-size:.7rem;padding:.3rem .75rem;"
-              onclick="event.stopPropagation();window.checkAllGrade('${grade}')">완료형 전체 ✓</button>
-            <button style="background:var(--red-lt);border:1.5px solid #f5c0c0;border-radius:8px;color:var(--red);font-family:'Noto Sans KR',sans-serif;font-size:.7rem;padding:.3rem .75rem;cursor:pointer;"
-              onclick="event.stopPropagation();window.resetGrade('${grade}')">이 학년 초기화</button>
-          </div>` : ''}
-      ` : ''}`;
+
+    // 헤더
+    var header = document.createElement('div');
+    header.className = 'grade-header';
+    header.onclick = function() { toggleGrade(grade); };
+    header.innerHTML =
+      '<span style="font-size:1rem;min-width:22px;">' + medal + '</span>' +
+      '<span class="grade-title">' + grade + '</span>' +
+      '<span class="grade-avg">평균 ' + avg + '일</span>' +
+      '<div class="grade-bar-wrap"><div class="grade-bar-bg">' +
+        '<div class="grade-bar-fill" style="width:' + pct + '%;background:' + color + ';"></div>' +
+      '</div></div>' +
+      '<span class="grade-toggle">' + (isExp ? '▲' : '▼') + '</span>';
+    sec.appendChild(header);
+
+    if (isExp) {
+      // 컬럼 템플릿
+      var colCount = missions.length + 1;
+      var colTemplate = '80px ' + Array(missions.length).fill('1fr').join(' ');
+
+      // 헤드행
+      var thead = document.createElement('div');
+      thead.className = 'student-table-head';
+      thead.style.gridTemplateColumns = colTemplate;
+      var headHTML = '<span class="col-label" style="text-align:left;">이름</span>';
+      missions.forEach(function(m) {
+        headHTML += '<span class="col-label">' + m[0] + '<br><span style="color:' +
+          (m[1].type === 'count' ? 'var(--gold)' : 'var(--mint-dk)') + ';">' +
+          (m[1].type === 'count' ? '#' : '✓') + '</span></span>';
+      });
+      thead.innerHTML = headHTML;
+      sec.appendChild(thead);
+
+      if (students.length === 0) {
+        var noEl = document.createElement('div');
+        noEl.className = 'empty-msg';
+        noEl.textContent = '명단에 학생이 없어요.';
+        sec.appendChild(noEl);
+      } else {
+        students.forEach(function(pair) {
+          var name = pair[1];
+          var row = document.createElement('div');
+          row.className = 'student-table-row';
+          row.style.gridTemplateColumns = colTemplate;
+          var rowHTML = '<div class="student-name-cell">' + esc(name) + '</div>';
+          missions.forEach(function(m) {
+            var mname = m[0];
+            var mtype = m[1].type;
+            var val   = getVal(grade, name, mname);
+            if (mtype === 'check') {
+              var done = !!val;
+              rowHTML += '<div class="mission-cell">' +
+                '<div class="check-btn ' + (done ? 'done' : '') + '" ' +
+                'onclick="window.toggleCheck(\'' + grade + '\',\'' + name + '\',\'' + mname + '\')">' +
+                (done ? '✓' : '') + '</div></div>';
+            } else {
+              var num = parseInt(val) || 0;
+              rowHTML += '<div class="mission-cell"><div class="count-ctrl">' +
+                '<button class="count-btn" onclick="window.changeCount(\'' + grade + '\',\'' + name + '\',\'' + mname + '\',-1)">−</button>' +
+                '<span class="count-num ' + (!num ? 'zero' : '') + '">' + num + '</span>' +
+                '<button class="count-btn" onclick="window.changeCount(\'' + grade + '\',\'' + name + '\',\'' + mname + '\',1)">+</button>' +
+                '</div></div>';
+            }
+          });
+          row.innerHTML = rowHTML;
+          sec.appendChild(row);
+        });
+
+        var bar = document.createElement('div');
+        bar.className = 'action-bar';
+        bar.innerHTML =
+          '<button class="act-btn act-btn-mint" onclick="window.checkAllGrade(\'' + grade + '\')">완료형 전체 ✓</button>' +
+          '<button class="act-btn act-btn-red" onclick="window.resetGrade(\'' + grade + '\')">이 학년 초기화</button>';
+        sec.appendChild(bar);
+      }
+    }
     container.appendChild(sec);
   });
 }
 
-window.toggleGrade = function(grade) {
-  expandedGrade = expandedGrade===grade ? null : grade;
+function toggleGrade(grade) {
+  expandedGrade = expandedGrade === grade ? null : grade;
   renderPassport();
-};
+}
+window.toggleGrade = toggleGrade;
 
 window.toggleCheck = async function(grade, name, mission) {
-  const cur = getVal(grade,name,mission);
-  await set(ref(db,`passport/${grade}/${name}/${mission}`), cur ? null : true);
-  showToast(cur ? `${name} · ${mission} 취소` : `${name} · ${mission} 완료 ✓`);
+  var cur = getVal(grade, name, mission);
+  await set(ref(db, 'passport/' + grade + '/' + name + '/' + mission), cur ? null : true);
+  showToast(cur ? name + ' · ' + mission + ' 취소' : name + ' · ' + mission + ' 완료 ✓');
 };
-
 window.changeCount = async function(grade, name, mission, delta) {
-  const cur = parseInt(getVal(grade,name,mission))||0;
-  const next = Math.max(0, cur+delta);
-  await set(ref(db,`passport/${grade}/${name}/${mission}`), next||null);
+  var cur  = parseInt(getVal(grade, name, mission)) || 0;
+  var next = Math.max(0, cur + delta);
+  await set(ref(db, 'passport/' + grade + '/' + name + '/' + mission), next || null);
 };
-
 window.checkAllGrade = async function(grade) {
-  const students = getStudents(grade);
-  const checkMs  = getMissions().filter(([,v])=>v.type==='check');
-  for (const [,name] of students) {
-    for (const [m] of checkMs) {
-      await set(ref(db,`passport/${grade}/${name}/${m}`), true);
+  var students  = getStudents(grade);
+  var checkMs   = getMissions().filter(function(m){ return m[1].type === 'check'; });
+  for (var i = 0; i < students.length; i++) {
+    for (var j = 0; j < checkMs.length; j++) {
+      await set(ref(db, 'passport/' + grade + '/' + students[i][1] + '/' + checkMs[j][0]), true);
     }
   }
-  showToast(`${grade} 완료형 전체 ✓`);
+  showToast(grade + ' 완료형 전체 ✓');
 };
-
 window.resetGrade = async function(grade) {
-  if (!confirm(`${grade} 전체를 초기화할까요?`)) return;
-  await set(ref(db,`passport/${grade}`), null);
-  showToast(`${grade} 초기화`);
+  if (!confirm(grade + ' 전체를 초기화할까요?')) return;
+  await set(ref(db, 'passport/' + grade), null);
+  showToast(grade + ' 초기화');
 };
-
 window.resetAll = async function() {
   if (!confirm('정말 전체 참여 현황을 초기화할까요?')) return;
-  await set(ref(db,'passport'), null);
+  await set(ref(db, 'passport'), null);
   showToast('전체 초기화');
 };
 
 /* ── 미션 설정 ── */
 function renderMissionsAdmin() {
-  const missions = getMissions();
-  const list = document.getElementById('mission-list-admin');
-  list.innerHTML = missions.map(([m, info]) => {
-    const isFixed = FIXED_MISSIONS.includes(m);
-    return `<div class="mission-row">
-      <span class="mission-row-name">${esc(m)}</span>
-      <div class="mission-row-type">
-        <button class="type-btn ${info.type==='check'?'active-check':''}"
-          onclick="window.setMissionType('${m}','check')">✓ 완료형</button>
-        <button class="type-btn ${info.type==='count'?'active-count':''}"
-          onclick="window.setMissionType('${m}','count')"># 횟수형</button>
-      </div>
-      ${isFixed
+  var missions = getMissions();
+  var list = document.getElementById('mission-list-admin');
+  var html = '';
+  missions.forEach(function(m) {
+    var name    = m[0];
+    var type    = m[1].type;
+    var isFixed = FIXED_MISSIONS.indexOf(name) >= 0;
+    html += '<div class="mission-row">' +
+      '<span class="mission-row-name">' + esc(name) + '</span>' +
+      '<div style="display:flex;gap:.3rem;">' +
+        '<button class="type-btn ' + (type === 'check' ? 'active-check' : '') + '" ' +
+          'onclick="window.setMissionType(\'' + name + '\',\'check\')">✓ 완료형</button>' +
+        '<button class="type-btn ' + (type === 'count' ? 'active-count' : '') + '" ' +
+          'onclick="window.setMissionType(\'' + name + '\',\'count\')"> # 횟수형</button>' +
+      '</div>' +
+      (isFixed
         ? '<span class="mission-fixed-tag">고정</span>'
-        : `<button class="mission-del-btn" onclick="window.removeMission('${m}')">✕</button>`}
-    </div>`;
-  }).join('');
+        : '<button class="mission-del-btn" onclick="window.removeMission(\'' + name + '\')">✕</button>') +
+    '</div>';
+  });
+  list.innerHTML = html;
 }
-
 window.setMissionType = async function(name, type) {
-  await set(ref(db,`missions/${name}/type`), type);
-  showToast(`'${name}' → ${type==='check'?'완료형':'횟수형'}`);
+  await set(ref(db, 'missions/' + name + '/type'), type);
+  showToast("'" + name + "' → " + (type === 'check' ? '완료형' : '횟수형'));
 };
-
 window.addMission = async function() {
-  const input = document.getElementById('mission-input');
-  const name  = input.value.trim();
+  var input = document.getElementById('mission-input');
+  var name  = input.value.trim();
   if (!name) return;
   if (missionData[name]) { showToast('이미 있는 미션이에요'); return; }
-  await set(ref(db,`missions/${name}`), {type:'count'});
+  await set(ref(db, 'missions/' + name), {type: 'count'});
   input.value = '';
-  showToast(`'${name}' 추가됨`);
+  showToast("'" + name + "' 추가됨");
 };
-
 window.removeMission = async function(name) {
-  if (FIXED_MISSIONS.includes(name)) return;
-  if (!confirm(`'${name}' 미션을 삭제할까요?`)) return;
-  await set(ref(db,`missions/${name}`), null);
-  showToast(`'${name}' 삭제됨`);
+  if (FIXED_MISSIONS.indexOf(name) >= 0) return;
+  if (!confirm("'" + name + "' 미션을 삭제할까요?")) return;
+  await set(ref(db, 'missions/' + name), null);
+  showToast("'" + name + "' 삭제됨");
 };
 
 /* ── 학생 명단 ── */
 function renderRoster() {
-  const container = document.getElementById('roster-list');
+  var container = document.getElementById('roster-list');
   container.innerHTML = '';
-  GRADES.forEach(grade => {
-    const students = getStudents(grade);
-    const rows = students.length===0
-      ? '<div class="empty-msg">아직 학생이 없어요.</div>'
-      : students.map(([key,name])=>
-          `<div class="name-row">
-            <span class="name-text">${esc(name)}</span>
-            <button class="del-btn" onclick="window.deleteStudent('${grade}','${key}','${esc(name)}')">✕</button>
-          </div>`).join('');
-    const sec = document.createElement('div');
+  GRADES.forEach(function(grade) {
+    var students = getStudents(grade);
+    var sec  = document.createElement('div');
     sec.className = 'roster-section';
-    sec.innerHTML = `
-      <div class="roster-header">${grade} <span>${students.length}명</span></div>
-      <div>${rows}</div>
-      <div class="add-row">
-        <input type="text" id="add-${grade}" placeholder="이름 입력 후 추가" maxlength="10"
-          onkeydown="if(event.key==='Enter')window.addStudent('${grade}')">
-        <button class="add-btn" onclick="window.addStudent('${grade}')">+ 추가</button>
-      </div>`;
+    var rows = '';
+    if (students.length === 0) {
+      rows = '<div class="empty-msg">아직 학생이 없어요.</div>';
+    } else {
+      students.forEach(function(pair) {
+        rows += '<div class="name-row">' +
+          '<span class="name-text">' + esc(pair[1]) + '</span>' +
+          '<button class="del-btn" onclick="window.deleteStudent(\'' + grade + '\',\'' + pair[0] + '\',\'' + esc(pair[1]) + '\')">✕</button>' +
+        '</div>';
+      });
+    }
+    sec.innerHTML =
+      '<div class="roster-header">' + grade + ' <span>' + students.length + '명</span></div>' +
+      '<div>' + rows + '</div>' +
+      '<div class="name-add-row">' +
+        '<input type="text" id="add-' + grade + '" placeholder="이름 입력 후 추가" maxlength="10" ' +
+          'onkeydown="if(event.key===\'Enter\')window.addStudent(\'' + grade + '\')">' +
+        '<button class="add-btn" onclick="window.addStudent(\'' + grade + '\')">+ 추가</button>' +
+      '</div>';
     container.appendChild(sec);
   });
 }
-
 window.addStudent = async function(grade) {
-  const input = document.getElementById(`add-${grade}`);
-  const name  = input.value.trim();
+  var input    = document.getElementById('add-' + grade);
+  var name     = input.value.trim();
   if (!name) return;
-  const existing = Object.values(rosterData[grade]||{});
-  if (existing.includes(name)) { showToast('이미 있는 이름이에요'); return; }
-  await push(ref(db,`roster/${grade}`), name);
-  input.value='';
-  showToast(`${name} 추가됨 ✓`);
+  var existing = Object.values(rosterData[grade] || {});
+  if (existing.indexOf(name) >= 0) { showToast('이미 있는 이름이에요'); return; }
+  await push(ref(db, 'roster/' + grade), name);
+  input.value = '';
+  showToast(name + ' 추가됨 ✓');
 };
-
 window.deleteStudent = async function(grade, key, name) {
-  if (!confirm(`'${name}'을(를) 삭제할까요?`)) return;
-  await set(ref(db,`roster/${grade}/${key}`), null);
-  await set(ref(db,`passport/${grade}/${name}`), null);
-  showToast(`${name} 삭제됨`);
+  if (!confirm("'" + name + "'을(를) 삭제할까요?")) return;
+  await set(ref(db, 'roster/' + grade + '/' + key), null);
+  await set(ref(db, 'passport/' + grade + '/' + name), null);
+  showToast(name + ' 삭제됨');
 };
 
 /* ── 댓글 관리 ── */
 function renderComments() {
-  const container = document.getElementById('comment-mgr');
+  var container = document.getElementById('comment-mgr');
   container.innerHTML = '<div class="empty-msg">불러오는 중…</div>';
-
-  // Firebase에서 모든 호수 댓글 동적으로 불러오기
-  onValue(ref(db,'comments'), snap => {
-    const allData = snap.val() || {};
+  onValue(ref(db, 'comments'), function(snap) {
+    var allData = snap.val() || {};
     container.innerHTML = '';
-
-    const keys = Object.keys(allData).sort((a,b) => {
-      const na = parseInt(a.replace('issue_','')); 
-      const nb = parseInt(b.replace('issue_',''));
-      return nb - na;
+    var keys = Object.keys(allData).sort(function(a, b) {
+      return parseInt(b.replace('issue_','')) - parseInt(a.replace('issue_',''));
     });
-
     if (keys.length === 0) {
       container.innerHTML = '<div class="empty-msg">댓글이 없어요.</div>';
       return;
     }
-
-    keys.forEach(key => {
-      const no = key.replace('issue_','');
-      const entries = Object.entries(allData[key]||{}).sort((a,b)=>b[1].ts-a[1].ts);
-      const sec = document.createElement('div');
+    keys.forEach(function(key) {
+      var no      = key.replace('issue_', '');
+      var entries = Object.entries(allData[key] || {}).sort(function(a, b){ return b[1].ts - a[1].ts; });
+      var sec     = document.createElement('div');
       sec.className = 'comment-issue-sec';
-      sec.innerHTML = buildCommentSection('제'+no+'호', entries, key);
+
+      var html = '<div class="comment-issue-head">제' + no + '호 <span>' + entries.length + '개</span></div>';
+      if (entries.length === 0) {
+        html += '<div class="empty-msg">댓글이 없어요.</div>';
+      } else {
+        entries.forEach(function(pair) {
+          var ck   = pair[0];
+          var c    = pair[1];
+          var nick = esc(((c.grade || '') + ' ' + (c.name || '익명')).trim());
+          html += '<div class="comment-mgr-item">';
+          html += '<div style="flex:1;min-width:0;">';
+          html += '<div class="comment-mgr-meta"><strong>' + nick + '</strong> · ' + timeAgo(c.ts) + '</div>';
+          if (c.text)   html += '<div class="comment-mgr-text">' + esc(c.text) + '</div>';
+          if (c.imgUrl) html += '<img class="comment-mgr-img" src="' + c.imgUrl + '" loading="lazy" onclick="window.open(this.src,\'_blank\')" alt="첨부 이미지">';
+          html += '</div>';
+          html += '<button class="comment-del-btn" onclick="window.deleteComment(\'' + key + '\',\'' + ck + '\')">삭제</button>';
+          html += '</div>';
+        });
+      }
+      sec.innerHTML = html;
       container.appendChild(sec);
     });
   }, { onlyOnce: true });
 }
-
-function buildCommentSection(label, entries, key) {
-  const head = '<div class="comment-issue-head">' + label + ' <span>' + entries.length + '개</span></div>';
-  if (entries.length === 0) return head + '<div class="empty-msg">댓글이 없어요.</div>';
-
-  const rows = entries.map(function([ck, c]) {
-    const nick = esc((c.grade||'') + ' ' + (c.name||'익명')).trim();
-    let html = '<div class="comment-mgr-item">';
-    html += '<div style="flex:1;min-width:0;">';
-    html += '<div class="comment-mgr-meta"><strong>' + nick + '</strong> · ' + timeAgo(c.ts) + '</div>';
-    if (c.text) html += '<div class="comment-mgr-text">' + esc(c.text) + '</div>';
-    if (c.imgUrl) {
-      html += '<img src="' + c.imgUrl + '" alt="첨부 이미지" loading="lazy" ';
-      html += 'style="margin-top:.4rem;width:100%;max-width:200px;border-radius:8px;border:1.5px solid var(--border);display:block;cursor:pointer;" ';
-      html += 'onclick="window.open(this.src,'_blank')">';
-    }
-    html += '</div>';
-    html += '<button class="comment-del-btn" onclick="window.deleteComment('' + key + '','' + ck + '')">삭제</button>';
-    html += '</div>';
-    return html;
-  }).join('');
-
-  return head + rows;
-}
-
 window.deleteComment = async function(issueKey, ck) {
   if (!confirm('이 댓글을 삭제할까요?')) return;
-  await set(ref(db,`comments/${issueKey}/${ck}`), null);
+  await set(ref(db, 'comments/' + issueKey + '/' + ck), null);
   showToast('댓글 삭제됨');
 };
 
-/* ── 유틸 ── */
-let toastTimer;
-function showToast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
-}
-function timeAgo(ts) {
-  if(!ts)return'';
-  const d=new Date(ts);
-  const now=new Date();
-  const diff=Math.floor((Date.now()-ts)/1000);
-  if(diff<60)return'방금 전';
-  if(diff<3600)return`${Math.floor(diff/60)}분 전`;
-  if(diff<86400)return`${Math.floor(diff/3600)}시간 전`;
-  const sameYear=d.getFullYear()===now.getFullYear();
-  return sameYear
-    ? `${d.getMonth()+1}월 ${d.getDate()}일`
-    : `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`;
-}
 /* ── 특보 관리 ── */
-onValue(ref(db,'currentIssue'), snap => {
-  const d = snap.val() || {};
-  // 폼에 현재값 채우기
-  if (document.getElementById('issue-no')) {
-    document.getElementById('issue-no').value        = d.no       || '';
-    document.getElementById('issue-title').value     = d.title    || '';
-    document.getElementById('issue-sentence').value  = d.sentence || '';
-    document.getElementById('issue-source').value    = d.source   || '';
-    document.getElementById('issue-date').value      = d.date     || '';
-    document.getElementById('issue-img').value       = d.img      || '';
-  }
-  // 미리보기
-  const prev = document.getElementById('issue-preview');
-  if (prev) {
-    if (d.no) {
-      prev.innerHTML = `
-        <b>제${d.no}호</b> · ${d.date||'날짜 없음'}<br>
-        ${d.title||''}<br>
-        <span style="color:var(--pink-dk)">${d.sentence||''}</span><br>
-        <span style="color:var(--muted);font-size:.75rem;">— ${d.source||''}</span><br>
-        <span style="color:var(--muted);font-size:.75rem;">이미지: ${d.img||'없음'}</span>`;
-    } else {
-      prev.textContent = '아직 저장된 특보가 없어요.';
-    }
-  }
-});
-
+function renderIssuePreview(d) {
+  var prev = document.getElementById('issue-preview');
+  if (!d || !d.no) { prev.textContent = '아직 저장된 특보가 없어요.'; return; }
+  document.getElementById('issue-no').value       = d.no       || '';
+  document.getElementById('issue-title').value    = d.title    || '';
+  document.getElementById('issue-sentence').value = d.sentence || '';
+  document.getElementById('issue-source').value   = d.source   || '';
+  document.getElementById('issue-date').value     = d.date     || '';
+  document.getElementById('issue-img').value      = d.img      || '';
+  prev.innerHTML =
+    '<b>제' + d.no + '호</b> · ' + (d.date || '') + '<br>' +
+    (d.title || '') + '<br>' +
+    '<span style="color:var(--pink-dk);">' + (d.sentence || '') + '</span><br>' +
+    '<span style="color:var(--muted);font-size:.75rem;">— ' + (d.source || '') + '</span><br>' +
+    '<span style="color:var(--muted);font-size:.75rem;">이미지: ' + (d.img || '없음') + '</span>';
+}
 window.saveIssue = async function() {
-  const no       = parseInt(document.getElementById('issue-no').value);
-  const title    = document.getElementById('issue-title').value.trim();
-  const sentence = document.getElementById('issue-sentence').value.trim();
-  const source   = document.getElementById('issue-source').value.trim();
-  const date     = document.getElementById('issue-date').value.trim();
-  const img      = document.getElementById('issue-img').value.trim();
+  var no       = parseInt(document.getElementById('issue-no').value);
+  var title    = document.getElementById('issue-title').value.trim();
+  var sentence = document.getElementById('issue-sentence').value.trim();
+  var source   = document.getElementById('issue-source').value.trim();
+  var date     = document.getElementById('issue-date').value.trim();
+  var img      = document.getElementById('issue-img').value.trim();
   if (!no || !title) { showToast('호수와 제목은 필수예요!'); return; }
-  await set(ref(db,'currentIssue'), { no, title, sentence, source, date, img });
+  await set(ref(db, 'currentIssue'), { no: no, title: title, sentence: sentence, source: source, date: date, img: img });
   showToast('특보 저장 완료 ✓');
 };
 
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;');}
+/* ── 유틸 ── */
+var toastTimer;
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2000);
+}
+function timeAgo(ts) {
+  if (!ts) return '';
+  var d    = new Date(ts);
+  var now  = new Date();
+  var diff = Math.floor((Date.now() - ts) / 1000);
+  if (diff < 60)    return '방금 전';
+  if (diff < 3600)  return Math.floor(diff / 60) + '분 전';
+  if (diff < 86400) return Math.floor(diff / 3600) + '시간 전';
+  var sameYear = d.getFullYear() === now.getFullYear();
+  return sameYear
+    ? (d.getMonth() + 1) + '월 ' + d.getDate() + '일'
+    : d.getFullYear() + '.' + (d.getMonth() + 1) + '.' + d.getDate();
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;');
+}
 </script>
 </body>
 </html>
