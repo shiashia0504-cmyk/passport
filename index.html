@@ -338,21 +338,29 @@ onValue(ref(db, 'roster'),    function(s) { rosterData   = s.val() || {}; render
 
 function getStudents(grade)      { return Object.values(rosterData[grade] || {}); }
 function getVal(grade, name, m)  { return passportData[grade] && passportData[grade][name] ? passportData[grade][name][m] : null; }
-function countMissions()         { return Object.entries(missionData).filter(function(e) { return e[1] && e[1].type === 'count'; }); }
+// 완료형 미션만 (순위 계산에 사용)
+function checkMissions()         { return Object.entries(missionData).filter(function(e) { return e[1] && e[1].type === 'check'; }); }
 
+// 학생 달성률: 완료형 미션 중 몇 개 했는지 %
+function studentRate(grade, name) {
+  var cms = checkMissions();
+  if (!cms.length) return 0;
+  var done = cms.filter(function(m) { return !!getVal(grade, name, m[0]); }).length;
+  return Math.round(done / cms.length * 100);
+}
+
+// 학년 평균 달성률
 function gradeAvg(grade) {
   var students = getStudents(grade);
   if (!students.length) return 0;
-  var cms = countMissions();
+  var cms = checkMissions();
   if (!cms.length) return 0;
-  var total = students.reduce(function(sum, name) {
-    return sum + cms.reduce(function(s, m) { return s + (parseInt(getVal(grade, name, m[0])) || 0); }, 0);
-  }, 0);
-  return parseFloat((total / students.length).toFixed(1));
+  var total = students.reduce(function(sum, name) { return sum + studentRate(grade, name); }, 0);
+  return Math.round(total / students.length);
 }
 
 function renderRank() {
-  var cms = countMissions();
+  var cms    = checkMissions();
   var rankEl = document.getElementById('rank-list');
   if (!cms.length) {
     rankEl.innerHTML = '<div class="loading" style="text-align:center;padding:1rem 0;">미션이 아직 설정되지 않았어요.</div>';
@@ -360,23 +368,19 @@ function renderRank() {
     return;
   }
 
+  var mLabel = cms.map(function(m) { return m[0]; }).join('·');
   var ranked = GRADES.map(function(g) {
     return { grade: g, avg: gradeAvg(g), count: getStudents(g).length };
   }).sort(function(a, b) { return b.avg - a.avg; });
 
-  var maxAvg = Math.max.apply(null, ranked.map(function(r) { return r.avg; }).concat([0.1]));
-  var mLabel = cms.map(function(m) { return m[0]; }).join('·');
-  var totalS = GRADES.reduce(function(s, g) { return s + getStudents(g).length; }, 0);
-  var totalM = GRADES.reduce(function(s, g) {
-    return s + getStudents(g).reduce(function(ss, n) {
-      return ss + cms.reduce(function(sss, m) { return sss + (parseInt(getVal(g, n, m[0])) || 0); }, 0);
-    }, 0);
+  var totalS    = GRADES.reduce(function(s, g) { return s + getStudents(g).length; }, 0);
+  var totalRate = GRADES.reduce(function(s, g) {
+    return s + getStudents(g).reduce(function(ss, n) { return ss + studentRate(g, n); }, 0);
   }, 0);
-  var overallAvg = totalS ? (totalM / totalS).toFixed(1) : 0;
+  var overallAvg = totalS ? Math.round(totalRate / totalS) : 0;
 
   rankEl.innerHTML = '';
   ranked.forEach(function(item, i) {
-    var pct   = maxAvg > 0 ? Math.round(item.avg / maxAvg * 100) : 0;
     var color = BAR_COLORS[i];
     var div   = document.createElement('div');
     div.className = 'rank-item';
@@ -384,22 +388,22 @@ function renderRank() {
       '<div class="rank-medal">' + MEDALS[i] + '</div>' +
       '<div class="rank-grade">' + item.grade + '</div>' +
       '<div class="rank-bar-wrap">' +
-        '<div class="rank-bar-bg"><div class="rank-bar-fill" style="width:' + pct + '%;background:' + color + ';"></div></div>' +
+        '<div class="rank-bar-bg"><div class="rank-bar-fill" style="width:' + item.avg + '%;background:' + color + ';"></div></div>' +
         '<div class="rank-detail">' + item.count + '명 · ' + mLabel + '</div>' +
       '</div>' +
-      '<div class="rank-score" style="color:' + color + ';">' + item.avg + '<span class="rank-unit">일</span></div>';
+      '<div class="rank-score" style="color:' + color + ';">' + item.avg + '<span class="rank-unit">%</span></div>';
     rankEl.appendChild(div);
   });
 
   document.getElementById('passport-note').textContent =
-    totalS ? '전체 평균 ' + overallAvg + '일 · ' + totalS + '명 참여 중 🌿' : '';
+    totalS ? '전체 평균 달성률 ' + overallAvg + '% · ' + totalS + '명 참여 중 🌿' : '';
 
   // 챔피언 배너
   var top    = ranked.filter(function(r) { return r.count > 0; })[0];
   var banner = document.getElementById('champion-banner');
   var inner  = document.getElementById('champion-inner');
   if (top && top.avg > 0) {
-    inner.textContent = '🏆 건강여권 현재 1위 · ' + top.grade + ' · 평균 ' + top.avg + '일 (' + mLabel + ')  ✨  도서관에서 확인해보세요!';
+    inner.textContent = '🏆 건강여권 현재 1위 · ' + top.grade + ' · 달성률 ' + top.avg + '% (' + mLabel + ')  ✨  도서관에서 확인해보세요!';
     banner.style.display = 'block';
   } else {
     banner.style.display = 'none';
